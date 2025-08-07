@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LawConnect Calendar</title>
+  <link rel="stylesheet" href="Appointment.css">
+</head>
+<body>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-container">
+
+    <!-- TOP NAV -->
+    <div class="top-bar">
+      <div class="menu-icon">&#9776;</div>
+      <div class="logo">LawConnect</div>
+    </div>
+
+    <!-- Calendar Box -->
+    <div class="calendar-box">
+      <div class="calendar-header">
+        <button id="prevMonth">&#8592;</button>
+        <div id="monthYear"></div>
+        <button id="nextMonth">&#8594;</button>
+      </div>
+
+      <!-- Days of week -->
+      <div class="days-of-week">
+        <div>S</div>
+        <div>M</div>
+        <div>T</div>
+        <div>W</div>
+        <div>T</div>
+        <div>F</div>
+        <div>S</div>
+      </div>
+
+      <!-- Calendar grid -->
+      <div class="calendar-grid" id="calendar"></div>
+    </div>
+
+    <!-- Book Appointment -->
+    <a href="#" class="book-button">+ BOOK APPOINTMENT</a>
+
+    <!-- Appointments List -->
+    <div class="appointments">
+      <strong>UPCOMING APPOINTMENTS</strong>
+
+      <div class="appointment">
+        <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24" fill="#0a3c78">
+          <path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm0 1.5a8.75 8.75 0 1 1 0 17.5 8.75 8.75 0 0 1 0-17.5zm.75 3.75h-1.5v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+        </svg>
+        19th June, 2025 — Meeting with Mr. Samuel Dompreh.
+      </div>
+
+      <div class="appointment">
+        <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24" fill="#0a3c78">
+          <path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm0 1.5a8.75 8.75 0 1 1 0 17.5 8.75 8.75 0 0 1 0-17.5zm.75 3.75h-1.5v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+        </svg>
+        12th June, 2025 — Meeting with Mr. Kwesi Debrah.
+      </div>
+
+      <div class="appointment">
+        <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 24 24" fill="#0a3c78">
+          <path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm0 1.5a8.75 8.75 0 1 1 0 17.5 8.75 8.75 0 0 1 0-17.5zm.75 3.75h-1.5v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+        </svg>
+        9th June, 2025 — Meeting with Mrs. Priscilla Amofa.
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+      <div class="nav-item">
+        <!-- Home icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#fff" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </div>
+
+      <div class="nav-item active">
+        <!-- Calendar icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#002f5c" viewBox="0 0 24 24">
+          <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2
+            2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0
+            16H5V9h14v11zM7 11h5v5H7z"/>
+        </svg>
+      </div>
+
+      <div class="nav-item">
+        <!-- Messages icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#fff" viewBox="0 0 24 24">
+          <path d="M20 2H4a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+        </svg>
+      </div>
+
+      <div class="nav-item">
+        <!-- Profile icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="#fff" viewBox="0 0 24 24">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5
+            2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10
+            1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+        </svg>
+      </div>
+  </div>
+ 
+
+  <!-- SCRIPT -->
+  <script>
+    const calendar = document.getElementById('calendar');
+    const monthYear = document.getElementById('monthYear');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+
+    let today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    function generateCalendar(month, year) {
+      calendar.innerHTML = '';
+      const firstDay = new Date(year, month).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const bookedDays = [9, 12, 19];
+
+      monthYear.innerText = `${new Date(year, month).toLocaleString('default', { month: 'long' }).toUpperCase()} ${year}`;
+
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        calendar.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayEl = document.createElement('div');
+        dayEl.className = 'day';
+        dayEl.innerText = day;
+
+        if (
+          day === today.getDate() &&
+          month === today.getMonth() &&
+          year === today.getFullYear()
+        ) {
+          dayEl.classList.add('today');
+        }
+
+        if (bookedDays.includes(day) && month === 5 && year === 2025) {
+          dayEl.classList.add('booked');
+        }
+
+        calendar.appendChild(dayEl);
+      }
+    }
+
+    prevMonthBtn.addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      generateCalendar(currentMonth, currentYear);
+    });
+
+    nextMonthBtn.addEventListener('click', () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      generateCalendar(currentMonth, currentYear);
+    });
+
+    generateCalendar(currentMonth, currentYear);
+  </script>
+</body>
+</html>
