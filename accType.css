@@ -1,0 +1,102 @@
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9; /* Light background */
+  color: #1a1a1a; /* Dark text */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Full viewport height */
+  line-height: 1.6;
+}
+
+/* Main Container */
+.account-type-container {
+  width: 90%;
+  max-width: 400px;
+  background-color: #ffffff; /* White background for the card */
+  padding: 30px 20px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  border-radius: 16px; /* Rounded corners */
+}
+
+/* Title Styling */
+.account-type-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  line-height: 1.4;
+  letter-spacing: 1px;
+  color: #1a1a1a; /* Ensure title color is dark */
+}
+
+/* Image Wrapper */
+.account-type-image-wrapper {
+  margin-bottom: 30px;
+}
+
+.account-type-image-wrapper img {
+  width: 130px;
+  max-width: 100%;
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Button Group */
+.account-type-button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between buttons */
+}
+
+/* Individual Account Button */
+.account-type-button {
+  display: block; /* Make the anchor behave like a block */
+  padding: 15px;
+  background-color: #e3e1fa; /* Light purple background */
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1a1a1a; /* Dark text for buttons */
+  text-decoration: none; /* Remove underline */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  cursor: pointer; /* Indicate clickable */
+}
+
+.account-type-button:hover {
+  background-color: #c6c3f1; /* Slightly darker purple on hover */
+  transform: scale(1.02); /* Slight scale effect */
+}
+
+/* Footer Styling */
+.account-type-footer {
+  margin-top: 40px;
+  font-size: 1.5rem;
+  font-family: 'Comic Sans MS', cursive, sans-serif; /* Specific font as per original */
+  color: #00134d; /* Dark blue color */
+  font-style: italic; /* Added italic for consistency with other footers */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .account-type-title {
+    font-size: 1.5rem;
+  }
+
+  .account-type-button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .account-type-footer {
+    font-size: 1.2rem;
+  }
+}

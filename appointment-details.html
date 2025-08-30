@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Appointment</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+
+    .booking-container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+
+    .step-indicators {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .step-indicators div {
+      width: 25%;
+      text-align: center;
+      padding: 10px;
+      border-bottom: 3px solid #ccc;
+    }
+    .step-indicators .active {
+      border-color: #007bff;
+      font-weight: bold;
+    }
+
+    .lawyer-list {
+      display: grid;
+      gap: 10px;
+    }
+    .lawyer-card {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .lawyer-card:hover {
+      border-color: #007bff;
+      background: #f0f8ff;
+    }
+    .lawyer-card.selected {
+      border: 2px solid #007bff;
+      background: #e6f0ff;
+    }
+
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .nav-buttons button {
+      padding: 10px 20px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .nav-buttons button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .summary-card {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    .summary-card h3 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="booking-container">
+    <h1>Book an Appointment</h1>
+
+    <!-- Step Indicators -->
+    <div class="step-indicators">
+      <div id="indicator-1" class="active">1. Choose Lawyer</div>
+      <div id="indicator-2">2. Date & Time</div>
+      <div id="indicator-3">3. Case Details</div>
+      <div id="indicator-4">4. Confirm</div>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="step-1" class="step active">
+      <h2>Select a Lawyer</h2>
+      <div class="lawyer-list">
+        <div class="lawyer-card" onclick="selectLawyer('dompreh', this)">
+          <h3>Lawyer Dompreh</h3>
+          <p>Specialist in Family Law</p>
+        </div>
+        <div class="lawyer-card" onclick="selectLawyer('mensah', this)">
+          <h3>Lawyer Mensah</h3>
+          <p>Specialist in Criminal Law</p>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button id="step1Next" disabled>Next</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step-2" class="step">
+      <h2>Select Date & Time</h2>
+      <input type="date" id="appointmentDate" />
+      <input type="time" id="appointmentTime" />
+      <div class="nav-buttons">
+        <button onclick="goToStep(1)">Back</button>
+        <button id="step2Next" disabled>Next</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="step-3" class="step">
+      <h2>Case Details</h2>
+      <textarea id="caseDetails" rows="5" placeholder="Describe your case..."></textarea>
+      <div class="nav-buttons">
+        <button onclick="goToStep(2)">Back</button>
+        <button id="step3Next" disabled>Next</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div id="step-4" class="step">
+      <h2>Appointment Summary</h2>
+      <div class="summary-card" id="appointmentSummary">
+        <!-- Populated by JS -->
+      </div>
+      <div class="nav-buttons">
+        <button onclick="goToStep(3)">Back</button>
+        <button onclick="confirmAppointment()">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const lawyers = {
+      dompreh: { name: "Lawyer Dompreh", specialty: "Family Law" },
+      mensah: { name: "Lawyer Mensah", specialty: "Criminal Law" }
+    };
+
+    const appointmentData = {
+      lawyer: null,
+      date: "",
+      time: "",
+      caseDetails: ""
+    };
+
+    const steps = document.querySelectorAll(".step");
+    const stepIndicators = document.querySelectorAll(".step-indicators div");
+
+    const step1NextBtn = document.getElementById("step1Next");
+    const step2NextBtn = document.getElementById("step2Next");
+    const step3NextBtn = document.getElementById("step3Next");
+
+    const appointmentDateInput = document.getElementById("appointmentDate");
+    const appointmentTimeInput = document.getElementById("appointmentTime");
+    const caseDetailsInput = document.getElementById("caseDetails");
+
+    const summaryDiv = document.getElementById("appointmentSummary");
+
+    function goToStep(toStep) {
+      steps.forEach(s => s.classList.remove("active"));
+      stepIndicators.forEach(i => i.classList.remove("active"));
+
+      document.getElementById("step-" + toStep).classList.add("active");
+      stepIndicators[toStep - 1].classList.add("active");
+
+      if (toStep === 4) {
+        updateSummary();
+      }
+    }
+
+    function selectLawyer(lawyerId, element) {
+      appointmentData.lawyer = lawyers[lawyerId];
+
+      document.querySelectorAll(".lawyer-card").forEach(card => {
+        card.classList.remove("selected");
+      });
+
+      element.classList.add("selected");
+      step1NextBtn.disabled = false;
+    }
+
+    appointmentDateInput.addEventListener("input", validateStep2);
+    appointmentTimeInput.addEventListener("input", validateStep2);
+    caseDetailsInput.addEventListener("input", validateStep3);
+
+    step1NextBtn.addEventListener("click", () => goToStep(2));
+    step2NextBtn.addEventListener("click", () => goToStep(3));
+    step3NextBtn.addEventListener("click", () => goToStep(4));
+
+    function validateStep2() {
+      if (appointmentDateInput.value && appointmentTimeInput.value) {
+        appointmentData.date = appointmentDateInput.value;
+        appointmentData.time = appointmentTimeInput.value;
+        step2NextBtn.disabled = false;
+      } else {
+        step2NextBtn.disabled = true;
+      }
+    }
+
+    function validateStep3() {
+      if (caseDetailsInput.value.trim().length > 10) {
+        appointmentData.caseDetails = caseDetailsInput.value;
+        step3NextBtn.disabled = false;
+      } else {
+        step3NextBtn.disabled = true;
+      }
+    }
+
+    function updateSummary() {
+      summaryDiv.innerHTML = `
+        <h3>${appointmentData.lawyer.name}</h3>
+        <p><strong>Specialty:</strong> ${appointmentData.lawyer.specialty}</p>
+        <p><strong>Date:</strong> ${appointmentData.date}</p>
+        <p><strong>Time:</strong> ${appointmentData.time}</p>
+        <p><strong>Case Details:</strong><br>${appointmentData.caseDetails}</p>
+      `;
+    }
+
+    function confirmAppointment() {
+      alert("Appointment Confirmed!");
+      // later: send to backend
+    }
+  </script>
+</body>
+</html>

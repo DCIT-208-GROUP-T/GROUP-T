@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LawConnect Lawyer Dashboard: Comprehensive legal practice management with cases, appointments, clients, documents, and analytics">
+  <meta name="keywords" content="LawConnect, lawyer dashboard, legal cases, appointments, clients, documents, billing, analytics">
+  <meta name="author" content="LawConnect Team">
+  <title>Lawyer Dashboard | LawConnect</title>
+  <link rel="stylesheet" href="LawyerDashboard.css" />
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  <!-- Chart.js for analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <main class="lawyer-dashboard-main-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <h1 class="dashboard-title">LawConnect Dashboard</h1>
+        <span class="lawyer-name" id="lawyerName">Loading...</span>
+      </div>
+      <div class="top-bar-right">
+        <button class="quick-action-btn" onclick="openCreateCaseModal()" title="New Case">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+          New Case
+        </button>
+        <button class="icon-button" onclick="toggleSearch()" title="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+        </button>
+        <button class="icon-button" onclick="window.location.href='notifications.html'" title="Notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge" id="notificationBadge">0</span>
+        </button>
+        <button class="icon-button" onclick="toggleTheme()" title="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+            <path d="M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container" id="searchContainer" style="display: none;">
+      <input type="text" id="searchInput" placeholder="Search cases, clients, documents..." class="search-input">
+      <button class="search-close" onclick="toggleSearch()">×</button>
+    </div>
+
+    <!-- Overview Stats Cards -->
+    <section class="stats-grid-enhanced">
+      <!-- Open Cases Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M20 6H4v12h16V6zm0-2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="openCasesCount">0</h3>
+          <p>Open Cases</p>
+          <span class="stat-trend positive">+2 this week</span>
+        </div>
+      </div>
+
+      <!-- Appointments Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="scheduledCount">0</h3>
+          <p>Today's Appointments</p>
+          <span class="stat-trend">View Calendar</span>
+        </div>
+      </div>
+
+      <!-- Messages Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="unreadCount">0</h3>
+          <p>Unread Messages</p>
+          <span class="stat-trend negative">Urgent: 3</span>
+        </div>
+      </div>
+
+      <!-- Revenue Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm1 17h-2v-2h2v2zm1.31-7.9-.95.32c-.77.26-1.36.57-1.36 1.58h-2c0-1.5 1-2.1 1.85-2.45l1.3-.55c.47-.2.85-.53.85-1.1 0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5h-2c0-1.93 1.57-3.5 3.5-3.5s3.5 1.57 3.5 3.5c0 1.43-.97 2.37-2.19 2.77z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="unpaidAmount">$0</h3>
+          <p>Outstanding Revenue</p>
+          <span class="stat-trend positive">+15% this month</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-column">
+        <!-- Today's Agenda -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Today's Agenda</h3>
+            <button class="view-all-btn" onclick="window.location.href='appointment-details.html'">View All</button>
+          </div>
+          <div class="agenda-list" id="todaysAgenda">
+            <div class="agenda-item no-data">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 11H12V7h1v6h3v1h-3.5z"/>
+              </svg>
+              <span>No appointments scheduled for today</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Recent Cases -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Recent Cases</h3>
+            <button class="view-all-btn" onclick="window.location.href='CaseManagementDashboard.html'">Manage Cases</button>
+          </div>
+          <div class="cases-list" id="recentCases">
+            <div class="case-item">
+              <div class="case-info">
+                <h4>Corporate Merger Agreement</h4>
+                <span class="case-status status-active">Active</span>
+                <p>Client: John Doe • Last updated: 2 hours ago</p>
+              </div>
+              <button class="case-action" onclick="viewCase(1)">View</button>
+            </div>
+            <div class="case-item">
+              <div class="case-info">
+                <h4>Employment Dispute</h4>
+                <span class="case-status status-pending">Pending</span>
+                <p>Client: Jane Smith • Last updated: 1 day ago</p>
+              </div>
+              <button class="case-action" onclick="viewCase(2)">View</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-column">
+        <!-- Performance Analytics -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Performance Analytics</h3>
+            <select class="time-filter" onchange="updateAnalytics(this.value)">
+              <option value="week">This Week</option>
+              <option value="month" selected>This Month</option>
+              <option value="quarter">This Quarter</option>
+            </select>
+          </div>
+          <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+          </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="quick-actions-grid">
+            <button class="quick-action" onclick="openCreateCaseModal()">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              </svg>
+              New Case
+            </button>
+            <button class="quick-action" onclick="window.location.href='Bookappointment.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/>
+              </svg>
+              Schedule
+            </button>
+            <button class="quick-action" onclick="window.location.href='documents.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              Documents
+            </button>
+            <button class="quick-action" onclick="window.location.href='invoices.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+              </svg>
+              Invoices
+            </button>
+          </div>
+        </section>
+
+        <!-- Upcoming Deadlines -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Upcoming Deadlines</h3>
+            <button class="view-all-btn" onclick="window.location.href='CaseManagementDashboard.html'">View All</button>
+          </div>
+          <div class="deadlines-list" id="upcomingDeadlines">
+            <div class="deadline-item urgent">
+              <div class="deadline-info">
+                <h4>Court Hearing</h4>
+                <p>Corporate Merger Agreement • Tomorrow 10:00 AM</p>
+              </div>
+              <span class="deadline-time">1 day</span>
+            </div>
+            <div class="deadline-item warning">
+              <div class="deadline-info">
+                <h4>Document Submission</h4>
+                <p>Employment Dispute • 3 days</p>
+              </div>
+              <span class="deadline-time">3 days</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer class="footer-styling" role="navigation" aria-label="Main navigation">
+    <nav class="bottom-nav">
+      <button type="button" class="nav-item active" aria-label="Dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span>Dashboard</span>
+      </button>
+      <button type="button" class="nav-item" aria-label="Cases" onclick="window.location.href='CaseManagementDashboard.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M20 6H4v12h16V6zm0-2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 极 1-2-2V6a2 2 0 0 1 2-2h16z"/>
+        </svg>
+        <span>Cases</span>
+      </button>
+      <button type="button" class="nav-item" aria-label="Calendar" onclick="window.location.href='Bookappointment.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 极 24 24" fill="#fff">
+          <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 极 0 0-2-2zm0 16H5V9h14v11z"/>
+        </svg>
+        <span>Calendar</span>
+      </button>
+      <button type="button" class="nav-item" aria-label="Messages" onclick="window.location.href='Message.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v16l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <span>Messages</span>
+      </button>
+      <button type="button" class="nav-item" aria-label="Profile" onclick="window.location.href='lawyer-profile.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-极 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+        </svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="极://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- Enhanced JavaScript -->
+  <script src="LawyerDashboard.js"></script>
+</body>
+</html>

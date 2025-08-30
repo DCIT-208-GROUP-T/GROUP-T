@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Notifications - LawConnect">
+  <title>Notifications | LawConnect</title>
+  <link rel="stylesheet" href="CaseManagementDashboard.css">
+  <style>
+    .notifications-container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .notifications-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+    .notifications-title {
+      font-size: 1.8rem;
+      color: #002f5c;
+      margin: 0;
+    }
+    .notifications-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .filter-btn, .mark-all-read-btn {
+      padding: 8px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .filter-btn:hover, .mark-all-read-btn:hover {
+      background: #f7fafc;
+    }
+    .filter-btn.active {
+      background: #3182ce;
+      color: white;
+      border-color: #3182ce;
+    }
+    .notification-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .notification-item {
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 4px solid #3182ce;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .notification-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .notification-item.unread {
+      background: #ebf5ff;
+      border-left-color: #1A00FF;
+    }
+    .notification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .notification-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin: 0;
+      font-size: 1rem;
+    }
+    .notification-time {
+      color: #718096;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+    .notification-message {
+      color: #4a5568;
+      margin: 0;
+      line-height: 1.4;
+    }
+    .notification-meta {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: #718096;
+    }
+    .notification-type {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    .type-case { background: #e6fffa; color: #234e52; }
+    .type-appointment { background: #fed7d7; color: #742a2a; }
+    .type-message { background: #ebf5ff; color: #2c5282; }
+    .type-payment { background: #f0fff4; color: #22543d; }
+    .type-system { background: #faf5ff; color: #44337a; }
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #718096;
+    }
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+    .empty-state h3 {
+      margin: 0 0 10px 0;
+      color: #4a5568;
+    }
+    .notification-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .action-btn {
+      padding: 6px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s ease;
+    }
+    .action-btn:hover {
+      background: #f7fafc;
+    }
+    .action-btn.primary {
+      background: #3182ce;
+      color: white;
+      border-color: #3182ce;
+    }
+    .action-btn.primary:hover {
+      background: #2c5282;
+    }
+  </style>
+</head>
+<body>
+  <div class="notifications-container">
+    <header class="notifications-header">
+      <h1 class="notifications-title">Notifications</h1>
+      <div class="notifications-actions">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="unread">Unread</button>
+        <button class="mark-all-read-btn">Mark All Read</button>
+      </div>
+    </header>
+
+    <div class="notification-list" id="notification-list">
+      <!-- Notifications will be loaded here -->
+      <div class="empty-state">
+        <i>🔔</i>
+        <h3>No notifications yet</h3>
+        <p>You'll see important updates here</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-styling">
+    <nav class="bottom-nav">
+      <a href="ClientDashboard.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </a>
+      <a href="Bookappointment.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/>
+        </svg>
+      </a>
+      <a href="Message.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </a>
+      <a href="notifications.html" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+          <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+      </a>
+    </nav>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  
+  <!-- Notifications Service -->
+  <script src="notifications.js"></script>
+  
+  <script>
+    let currentFilter = 'all';
+    let notifications = [];
+
+    // Load notifications from backend
+    async function loadNotifications() {
+      const notificationList = document.getElementById('notification-list');
+      
+      try {
+        // Show loading state
+        notificationList.innerHTML = `
+          <div class="empty-state">
+            <i>⏳</i>
+            <h3>Loading notifications...</h3>
+            <p>Please wait while we fetch your notifications</p>
+          </div>
+        `;
+
+        // Initialize notifications service
+        const isInitialized = await notificationsService.initialize();
+        if (!isInitialized) {
+          throw new Error('User not authenticated');
+        }
+
+        // Fetch notifications from backend
+        const response = await notificationsService.getNotifications({
+          unreadOnly: currentFilter === 'unread',
+          limit: 100
+        });
+
+        if (response.success) {
+          notifications = response.data;
+          
+          if (notifications.length === 0) {
+            notificationList.innerHTML = `
+              <div class="empty-state">
+                <i>🔔</i>
+                <h3>No ${currentFilter === 'unread' ? 'unread ' : ''}notifications</h3>
+                <p>You're all caught up!</p>
+              </div>
+            `;
+            return;
+          }
+
+          // Render notifications
+          notificationList.innerHTML = notifications.map(notification => `
+            <div class="notification-item ${notification.isRead ? '' : 'unread'}" data-id="${notification._id}">
+              <div class="notification-header">
+                <h3 class="notification-title">${notification.title}</h3>
+                <span class="notification-time">${notificationsService.formatTime(notification.createdAt)}</span>
+              </div>
+              <p class="notification-message">${notification.message}</p>
+              <div class="notification-meta">
+                <span class="notification-type ${notificationsService.getTypeClass(notification.type)}">${notification.type}</span>
+                ${notification.relatedEntityId ? `<span>Related: ${notification.relatedEntityId.title || notification.relatedEntityId._id}</span>` : ''}
+              </div>
+              ${notification.actionUrl ? `
+                <div class="notification-actions">
+                  <button class="action-btn primary" onclick="handleNotificationAction('${notification._id}', '${notification.actionUrl}')">
+                    View Details
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+          `).join('');
+        } else {
+          throw new Error(response.message || 'Failed to load notifications');
+        }
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+        notificationList.innerHTML = `
+          <div class="empty-state">
+            <i>❌</i>
+            <h3>Error loading notifications</h3>
+            <p>${error.message || 'Please try again later'}</p>
+            <button class="action-btn primary" onclick="loadNotifications()">Retry</button>
+          </div>
+        `;
+      }
+    }
+
+    // Handle notification actions
+    async function handleNotificationAction(notificationId, actionUrl) {
+      try {
+        // Mark notification as read
+        await notificationsService.markNotificationAsRead(notificationId);
+        
+        // Navigate to action URL if provided
+        if (actionUrl) {
+          window.location.href = actionUrl;
+        } else {
+          // Reload notifications to reflect read status
+          loadNotifications();
+        }
+      } catch (error) {
+        console.error('Error handling notification action:', error);
+        alert('Error processing notification action. Please try again.');
+      }
+    }
+
+    // Mark all as read
+    async function markAllAsRead() {
+      try {
+        await notificationsService.markAsRead();
+        await loadNotifications(); // Reload to reflect changes
+      } catch (error) {
+        console.error('Error marking all as read:', error);
+        alert('Error marking notifications as read. Please try again.');
+      }
+    }
+
+    // Filter notifications
+    function filterNotifications(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+      loadNotifications();
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', async function() {
+      await loadNotifications();
+      
+      // Event listeners
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => filterNotifications(btn.dataset.filter));
+      });
+      
+      document.querySelector('.mark-all-read-btn').addEventListener('click', markAllAsRead);
+      
+      // Click on notification to mark as read
+      document.addEventListener('click', async function(e) {
+        const notificationItem = e.target.closest('.notification-item');
+        if (notificationItem && !e.target.closest('.action-btn')) {
+          const notificationId = notificationItem.dataset.id;
+          const notification = notifications.find(n => n._id === notificationId);
+          if (notification && !notification.isRead) {
+            try {
+              await notificationsService.markNotificationAsRead(notificationId);
+              // Reload to reflect read status
+              await loadNotifications();
+            } catch (error) {
+              console.error('Error marking notification as read:', error);
+            }
+          }
+        }
+      });
+
+      // Request notification permission for browser notifications
+      if ('Notification' in window) {
+        Notification.requestPermission();
+      }
+    });
+
+    // Real-time updates (polling every 30 seconds)
+    setInterval(async () => {
+      try {
+        const unreadCountBefore = notifications.filter(n => !n.isRead).length;
+        await loadNotifications();
+        const unreadCountAfter = notifications.filter(n => !n.isRead).length;
+        
+        // Show browser notification if new notifications arrived
+        if (unreadCountAfter > unreadCountBefore && 'Notification' in window && Notification.permission === 'granted') {
+          const newNotifications = notifications.filter(n => !n.isRead).slice(0, unreadCountAfter - unreadCountBefore);
+          newNotifications.forEach(notification => {
+            new Notification('LawConnect - New Notification', {
+              body: notification.message,
+              icon: '/images/lawconnect.jpg'
+            });
+          });
+        }
+      } catch (error) {
+        console.error('Error in real-time update:', error);
+      }
+    }, 30000);
+  </script>
+</body>
+</html>

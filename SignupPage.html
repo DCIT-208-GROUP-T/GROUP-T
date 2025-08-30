@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Join LawConnect - Sign up as a lawyer or client to access legal services.">
+  <meta name="keywords" content="LawConnect, signup, register, lawyer, client, legal services">
+  <meta name="author" content="LawConnect Team">
+  <title>Sign Up | LawConnect</title>
+  <link rel="stylesheet" href="SignupPage.css" />
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary-color: #64748b;
+      --accent-color: #f1f5f9;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --border-color: #e2e8f0;
+      --card-bg: #ffffff;
+      --bg-light: #f8fafc;
+    }
+
+    /* Dark Theme Variables */
+    [data-theme='dark'] {
+      --primary-color: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --secondary-color: #a1a1a1;
+      --accent-color: #1e293b;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-dark: #f1f5f9;
+      --text-light: #e2e8f0;
+      --border-color: #475569;
+      --card-bg: #334155;
+      --bg-light: #1e293b;
+    }
+  </style>
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <main class="signup-container">
+    <section class="signup-box" aria-labelledby="joinUsTitle">
+      <h1 id="joinUsTitle" class="welcome-text">JOIN US</h1>
+      <img src="/images/lawconnect.jpg" alt="Gavel Icon representing law and justice" class="gavel-icon" />
+
+      <form id="signupForm" class="signup-form">
+        <!-- Account Type Selection -->
+        <div class="account-type-section" role="radiogroup" aria-labelledby="accountTypeHeading">
+          <h3 id="accountTypeHeading">I am a:</h3>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="accountType" value="lawyer" required aria-label="Select account type as Lawyer" />
+              <span>Lawyer</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="accountType" value="client" required aria-label="Select account type as Client" />
+              <span>Client</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Personal Information -->
+        <label for="fullName">FULL NAME:</label>
+        <input type="text" id="fullName" name="fullName" required autocomplete="name" aria-label="Enter your full name" />
+
+        <label for="email">EMAIL:</label>
+        <input type="email" id="email" name="email" required autocomplete="email" aria-label="Enter your email address" />
+
+        <label for="phone">PHONE NUMBER:</label>
+        <input type="tel" id="phone" name="phone" required autocomplete="tel" aria-label="Enter your phone number" />
+
+        <!-- Lawyer-specific fields -->
+        <div id="lawyerFields" style="display: none;">
+          <label for="firmName">LAW FIRM NAME:</label>
+          <input type="text" id="firmName" name="firmName" autocomplete="organization" aria-label="Enter your law firm name" />
+
+          <label for="barNumber">BAR ADMISSION NUMBER:</label>
+          <input type="text" id="barNumber" name="barNumber" aria-label="Enter your bar admission number" />
+
+          <label for="specialization">SPECIALIZATION:</label>
+          <select id="specialization" name="specialization" aria-label="Select your specialization">
+            <option value="">Select Specialization</option>
+            <option value="Corporate Law">Corporate Law</option>
+            <option value="Criminal Law">Criminal Law</option>
+            <option value="Family Law">Family Law</option>
+            <option value="Real Estate Law">Real Estate Law</option>
+            <option value="Immigration Law">Immigration Law</option>
+            <option value="Personal Injury">Personal Injury</option>
+            <option value="Intellectual Property">Intellectual Property</option>
+            <option value="Environmental Law">Environmental Law</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Client-specific fields (can add more if needed, e.g., initial case type) -->
+        <div id="clientFields" style="display: none;">
+          <!-- Example: Initial Case Type for Client -->
+          <label for="clientCaseType">PRIMARY LEGAL INTEREST (Optional):</label>
+          <select id="clientCaseType" name="clientCaseType" aria-label="Select your primary legal interest">
+            <option value="">Select Primary Legal Interest</option>
+            <option value="Family Law">Family Law</option>
+            <option value="Corporate Law">Corporate Law</option>
+            <option value="Criminal Defense">Criminal Defense</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Immigration">Immigration</option>
+            <option value="Personal Injury">Personal Injury</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Password -->
+        <label for="password">PASSWORD:</label>
+        <input type="password" id="password" name="password" required autocomplete="new-password" aria-label="Create your password" />
+        <div id="password-error" class="error-message" aria-live="polite"></div>
+
+        <label for="confirmPassword">CONFIRM PASSWORD:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password" aria-label="Confirm your password" />
+        <div id="confirm-password-error" class="error-message" aria-live="polite"></div>
+
+        <!-- Terms and Conditions -->
+        <div class="terms-section">
+          <input type="checkbox" id="terms" name="terms" required aria-label="Agree to the Terms of Service and Privacy Policy" />
+          <label for="terms">I agree to the <a href="#" aria-label="Read Terms of Service">Terms of Service</a> and <a href="#" aria-label="Read Privacy Policy">Privacy Policy</a></label>
+        </div>
+
+        <button type="submit" class="signup-btn">CREATE ACCOUNT</button>
+      </form>
+
+      <div class="login-link">
+        Already have an account? <a href="loginPage.html">Login here</a>
+      </div>
+
+      <footer class="brand-name">LAWCONNECT</footer>
+    </section>
+  </main>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script src="SignupPage.js"></script>
+</body>
+</html>

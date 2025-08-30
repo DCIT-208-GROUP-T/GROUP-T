@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment | LawConnect</title>
+  <style>
+    :root {
+      --primary-color: #002f5c;
+      --secondary-color: #3182ce;
+      --success-color: #38a169;
+      --light-bg: #f5f7fa;
+      --card-bg: #ffffff;
+      --border-color: #cbd5e0;
+      --text-color: #002f5c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .appointment-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .appointment-header {
+      background: var(--primary-color);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .appointment-header h1 {
+      color: white;
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .progress-bar {
+      display: flex;
+      padding: 20px;
+      background: #f0f4f8;
+      justify-content: space-between;
+    }
+
+    .progress-step {
+      flex: 1;
+      text-align: center;
+      padding: 10px 0;
+      position: relative;
+    }
+
+    .step-number {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #cbd5e0;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-bottom: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .progress-step.active .step-number {
+      background: var(--secondary-color);
+    }
+
+    .progress-step.completed .step-number {
+      background: var(--success-color);
+    }
+
+    .step-label {
+      font-size: 0.8rem;
+      color: #718096;
+    }
+
+    .progress-step.active .step-label {
+      color: var(--primary-color);
+      font-weight: 500;
+    }
+
+    .form-content-container {
+      padding: 30px;
+    }
+
+    .step-content {
+      display: none;
+    }
+
+    .step-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    select, input[type="text"], input[type="tel"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.2);
+    }
+
+    .lawyer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .lawyer-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 极 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+    }
+
+    .lawyer-card:hover {
+      border-color: var(--secondary-color);
+      background: #f7fafc;
+    }
+
+    .lawyer-card.selected {
+      border: 2px solid var(--secondary-color);
+      background: #ebf5ff;
+    }
+
+    .lawyer-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #bee3f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      color: var(--secondary-color);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .lawyer-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .lawyer-specialty {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .lawyer-rating {
+      color: #ecc94b;
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    .calendar-container {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 15px;
+      border: 1px solid var(--border-color);
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .calendar-nav {
+      display: flex;
+      gap: 15px;
+    }
+
+    .calendar-nav button {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--secondary-color);
+      padding: 5px;
+    }
+
+    .calendar-month {
+      font-weight: 600;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .calendar-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 0.8rem;
+      color: #718096;
+      margin-bottom: 10px;
+    }
+
+    .calendar-weekdays div {
+      padding: 5px;
+    }
+
+    .calendar-day {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+
+    .calendar-day.disabled {
+      color: #cbd5e0;
+      cursor: not-allowed;
+      background: #f0f4f8;
+    }
+
+    .calendar-day.available {
+      background: #ebf5ff;
+      color: var(--secondary-color);
+    }
+
+    .calendar-day.available:hover:not(.selected) {
+      background: #d0e6ff;
+    }
+
+    .calendar-day.selected {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    .calendar-day.today {
+      border: 2px solid var(--success-color);
+    }
+
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .time-slot {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      text-align: center;
+      cursor: pointer;
+      background-color: var(--card-bg);
+      transition: all 0.2s ease;
+    }
+
+    .time-slot:hover:not(.selected) {
+      background: #f7fafc;
+      border-color: var(--secondary-color);
+    }
+
+    .time-slot.selected {
+      border-color: var(--secondary-color);
+      background: #ebf5ff;
+      color: var(--primary-color);
+      font-weight: 600;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+      gap: 15px;
+    }
+
+    button {
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+      flex-grow: 1;
+    }
+
+    .btn-outline {
+      background: var(--card极 bg);
+      border: 1px solid var(--border-color);
+      color: #4a5568;
+    }
+
+    .btn-outline:hover {
+      background: #f7fafc;
+      border-color: #a0aec0;
+    }
+
+    .btn-primary {
+      background: var(--secondary-color);
+      border: 1px solid var(--secondary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #2c5282;
+      border-color: #2c5282;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .confirmation-card {
+      background: #f0f4f8;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border: 1px solid var(--border-color);
+    }
+
+    .confirmation-card h3 {
+      color: var(--primary-color);
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+
+    .confirmation-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .confirmation-row:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+
+    .confirmation-label {
+      color: #718096;
+      font-weight: 500;
+    }
+
+    .confirmation-value {
+      color: var(--text-color);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    #success-message {
+      background: var(--card-bg);
+      padding: 40px 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+    }
+
+    #success-message h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    #success-message p {
+      color: #718096;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .appointment-container {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      
+      .time-slots {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="appointment-container">
+    <header class="appointment-header">
+      <h1>Book a Consultation</h1>
+    </header>
+    
+    <div class="progress-bar">
+      <div class="progress-step active" id="step1-indicator">
+        <div class="极 step-number">1</div>
+        <div class="step-label">Case Details</div>
+      </div>
+      <div class="progress-step" id="step2-indicator">
+        <div class="step-number">2</div>
+        <div class="step-label">Choose Lawyer</div>
+      </div>
+      <div class="progress-step" id="step3-indicator">
+        <div class="step-number">3</div>
+        <div class="step-label">Schedule</div>
+      </div>
+      <div class="progress-step" id="step4-indicator">
+        <div class="step-number">4</div>
+        <div class="step-label">Confirm</div>
+      </div>
+    </div>
+    
+    <div class="form-content-container">
+      <!-- Step 1: Case Details -->
+      <div class="step-content active" id="step1">
+        <div class="form-group">
+          <label for="case-type">Case Type</label>
+          <select id="case-type" required>
+            <option value="">Select case type</option>
+            <option value="Family Law">Family Law</option>
+            <option value="Corporate Law">Corporate Law</option>
+            <option value="Criminal Defense">Criminal Defense</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Immigration">Immigration</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="description">Brief Description</label>
+          <input type="text" id="description" placeholder="Describe your legal concern..." required>
+        </div>
+        
+        <div class="button-group">
+          <div></div>
+          <button type="button" class="btn-primary" id="step1-next">Next: Choose Lawyer</button>
+        </div>
+      </div>
+      
+      <!-- Step 2: Choose Lawyer -->
+      <div class="step-content" id="step2">
+        <div class="form-group">
+          <label>Select a lawyer</label>
+          <p>Based on your case type, we recommend these specialists:</p>
+          
+          <div class="lawyer-grid" id="lawyer-grid">
+            <!-- Lawyer cards will be dynamically populated here -->
+            <div class="loading-message">Loading available lawyers...</div>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="btn-outline" onclick="prevStep()">Back</button>
+          <button type="button" class="btn-primary" id="step2-next" disabled>Next: Schedule</button>
+        </div>
+      </div>
+      
+      <!-- Step 3: Schedule Appointment -->
+      <div class="step-content" id="step3">
+        <div class="form-group">
+          <label>Select date and time</label>
+          
+          <div class="calendar-container">
+            <div class="calendar-header">
+              <div class="calendar-nav">
+                <button type="button" onclick="prevMonth()">←</button>
+                <h3 class="calendar-month" id="calendar-month">July 2024</h3>
+                <button type="button" onclick="nextMonth()">→</button>
+              </div>
+            </div>
+            
+            <div class="calendar-weekdays">
+              <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            
+            <div class="calendar-grid" id="calendar-days"></div>
+          </div>
+          
+          <div id="time-slots-container" style="display: none; margin-top: 20px;">
+            <label>Available time slots for <span id="selected-date-text"></span>:</label>
+            <div class="time-slots" id="time-slots">
+              <div class="time-slot" onclick="selectTime('9:00 AM')">9:00 AM</div>
+              <div class="time-slot" onclick="selectTime('10:30 AM')">10:30 AM</div>
+              <div class="time-slot" onclick="selectTime('12:00 PM')">12:00 PM</div>
+              <div class="time-slot" onclick="selectTime('2:30 PM')">2:30 PM</div>
+              <div class="time-slot" onclick="selectTime('4:00 PM')">4:00 PM</div>
+              <div class="time-slot" onclick="selectTime('5:30 PM')">5:30 PM</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="btn-outline" onclick="prevStep()">Back</button>
+          <button type="button" class="btn-primary" id="step3-next" disabled>Next: Confirm</button>
+        </div>
+      </div>
+      
+      <!-- Step 4: Confirmation -->
+      <div class="step-content" id="step4">
+        <div class="confirmation-card">
+          <h3>Appointment Summary</h3>
+          
+          <div class="confirmation-row">
+            <span class="confirmation-label">Case Type:</span>
+            <span class="confirmation-value" id="confirm-case-type"></span>
+          </div>
+          
+          <div class="confirmation-row">
+            <span class="confirmation-label">Description:</span>
+            <span class="confirmation-value" id="confirm-description"></span>
+          </div>
+          
+          <div class="confirmation-row">
+            <span class="confirmation-label">Lawyer:</span>
+            <span class="confirmation-value" id="confirm-lawyer"></span>
+          </div>
+          
+          <div class="confirmation-row">
+            <span class="confirmation-label">Date & Time:</span>
+            <span class="confirmation-value" id="confirm-datetime"></span>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="contact-phone">Contact Phone</label>
+          <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567" required>
+        </div>
+        
+        <div class="button-group">
+          <button type="button" class="btn-outline" onclick="prevStep()">Back</button>
+          <button type="button" class="btn-primary" id="book-appointment-btn">Book Appointment</button>
+        </div>
+      </div>
+      
+      <!-- Success Message -->
+      <div id="success-message">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="#38a169">
+          <path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm-2 17l-5-5 1.4-1.4 3.6 3.6 6 7.6-7.6L19 8l-9 9z"/>
+        </svg>
+        
+        <h3>Appointment Booked Successfully!</h3>
+        <p id="success-details"></p>
+        <button type="button" class="btn-primary" onclick="window.location.href='ClientDashboard.html'">Return to Dashboard</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Current step tracking
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    // Selected appointment data
+    const appointmentData = {
+      caseType: '',
+      description: '',
+      lawyer: null,
+      date: null,
+      time: null,
+      phone: ''
+    };
+
+    // Lawyer data will be fetched from API
+    let lawyers = [];
+
+    // Function to fetch lawyers by specialty
+    async function fetchLawyers(specialty) {
+      try {
+        const response = await fetch(`/api/users/lawyers/specialty/${encodeURIComponent(specialty)}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch lawyers');
+        }
+        const lawyersData = await response.json();
+        lawyers = lawyersData.reduce((acc, lawyer) => {
+          acc[lawyer._id] = {
+            name: lawyer.fullName,
+            specialty: lawyer.specialty || specialty,
+            id: lawyer._id
+          };
+          return acc;
+        }, {});
+        return lawyersData;
+      } catch (error) {
+        console.error('Error fetching lawyers:', error);
+        alert('Failed to load lawyers. Please try again.');
+        return [];
+      }
+    }
+
+    // Function to fetch available time slots
+    async function fetchAvailableSlots(lawyerId, date) {
+      try {
+        const formattedDate = new Date(date).toISOString().split('T')[0];
+        const response = await fetch(`/api/appointments/available-slots/${lawyerId}/${formattedDate}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch available slots');
+        }
+        return await response.json();
+      } catch (error) {
+        console.error('Error fetching available slots:', error);
+        alert('Failed to load available time slots. Please try again.');
+        return [];
+      }
+    }
+
+    // Function to create appointment
+    async function createAppointment(appointmentData) {
+      try {
+        const response = await fetch('/api/appointments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            clientId: 'current-user-id', // This should be replaced with actual user ID
+            lawyerId: appointmentData.lawyer.id,
+            caseId: null, // This should be replaced with actual case ID if available
+            date: appointmentData.date,
+            time: appointmentData.time,
+            description: appointmentData.description
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to create appointment');
+        }
+
+        return await response.json();
+      } catch (error) {
+        console.error('Error creating appointment:', error);
+        throw error;
+      }
+    }
+
+    // Calendar variables
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+    let selectedDate = null;
+
+    // DOM Elements
+    let stepContents, stepIndicators, caseTypeSelect, descriptionInput, step2NextBtn, step3NextBtn;
+
+    /**
+     * Initialize everything when DOM is loaded
+     */
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 LawConnect Booking System Initialized');
+      
+      // Initialize DOM elements
+      initializeElements();
+      
+      // Setup event listeners
+      setupEventListeners();
+      
+      // Initialize calendar
+      renderCalendar();
+      
+      console.log('✅ Book Appointment System initialized successfully');
+    });
+
+    /**
+     * Initialize DOM elements
+     */
+    function initializeElements() {
+      stepContents = document.querySelectorAll('.step-content');
+      stepIndicators = document.querySelectorAll('.progress-step');
+      caseTypeSelect = document.getElementById('case-type');
+      descriptionInput = document.getElementById('description');
+      step2NextBtn = document.getElementById('step2-next');
+      step3NextBtn = document.getElementById('step3-next');
+    }
+
+    /**
+     * Setup all event listeners
+     */
+    function setupEventListeners() {
+      // Step 1: Case Details -> Choose Lawyer
+      document.getElementById('step1-next').addEventListener('click', () => nextStep(1));
+
+      // Step 2: Choose Lawyer -> Schedule
+      step2NextBtn.addEventListener('click', () => nextStep(2));
+
+      // Step 3: Schedule -> Confirm
+      step3NextBtn.addEventListener('click', () => nextStep(3));
+
+      // Step 4: Confirm -> Submit
+      document.getElementById('book-appointment-btn').addEventListener('click', submitAppointment);
+    }
+
+    /**
+     * Navigate to next step
+     */
+    function nextStep(step) {
+      // Validate current step
+      if (step === 1) {
+        if (!validateStep1()) return;
+        // Fetch lawyers when moving to step 2
+        loadLawyers(appointmentData.caseType);
+      } else if (step === 2) {
+        if (!validateStep2()) return;
+      } else if (step === 3) {
+        if (!validateStep3()) return;
+      }
+
+      // Update UI for step change
+      updateStepUI(step, step + 1);
+      
+      // Special actions for specific steps
+      if (step + 1 === 4) {
+        updateConfirmationDetails();
+      }
+    }
+
+    /**
+     * Navigate to previous step
+     */
+    function prevStep() {
+      updateStepUI(currentStep, currentStep - 1);
+    }
+
+    /**
+     * Update UI for step navigation
+     */
+    function updateStepUI(fromStep, toStep) {
+      // Hide current step, show next step
+      stepContents[fromStep - 1].classList.remove('active');
+      stepIndicators[fromStep - 1].classList.remove('active');
+      
+      stepContents[toStep - 1].classList.add('active');
+      stepIndicators[toStep - 1].classList.add('active');
+      
+      // Mark completed steps
+      if (toStep > fromStep) {
+        stepIndicators[fromStep - 1].classList.add('completed');
+      } else {
+        stepIndicators[fromStep - 1].classList.remove('completed');
+      }
+      
+      currentStep = toStep;
+    }
+
+    /**
+     * Validate Step 1: Case Details
+     */
+    function validateStep1() {
+      if (!caseTypeSelect.value) {
+        alert('Please select a case type.');
+        return false;
+      }
+      if (!descriptionInput.value.trim()) {
+        alert('Please provide a brief description.');
+        return false;
+      }
+      
+      appointmentData.caseType = caseTypeSelect.value;
+      appointmentData.description = descriptionInput.value.trim();
+      return true;
+    }
+
+    /**
+     * Validate Step 2: Choose Lawyer
+     */
+    function validateStep2() {
+      if (!appointmentData.lawyer) {
+        alert('Please select a lawyer.');
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * Validate Step 3: Schedule
+     */
+    function validateStep3() {
+      if (!appointmentData.date || !appointmentData.time) {
+        alert('Please select both a date and time.');
+        return false;
+      }
+      return true;
+    }
+
+    /**
+     * Load lawyers based on specialty
+     */
+    async function loadLawyers(specialty) {
+      const lawyerGrid = document.getElementById('lawyer-grid');
+      lawyerGrid.innerHTML = '<div class="loading-message">Loading available lawyers...</div>';
+      
+      try {
+        const lawyersData = await fetchLawyers(specialty);
+        
+        if (lawyersData.length === 0) {
+          lawyerGrid.innerHTML = '<div class="no-lawyers-message">No lawyers available for this specialty. Please try another case type.</div>';
+          return;
+        }
+        
+        lawyerGrid.innerHTML = '';
+        
+        lawyersData.forEach(lawyer => {
+          const lawyerCard = document.createElement('div');
+          lawyerCard.className = 'lawyer-card';
+          lawyerCard.onclick = () => selectLawyer(lawyer._id);
+          
+          // Get initials for avatar
+          const names = lawyer.fullName.split(' ');
+          const initials = names.length > 1 
+            ? `${names[0][0]}${names[1][0]}` 
+            : names[0][0];
+          
+          lawyerCard.innerHTML = `
+            <div class="lawyer-avatar">${initials}</div>
+            <div class="lawyer-info">
+              <div class="lawyer-name">${lawyer.fullName}</div>
+              <div class="lawyer-specialty">${lawyer.specialty || specialty}</div>
+              <div class="lawyer-rating">★★★★★ (${Math.floor(Math.random() * 50) + 1} reviews)</div>
+            </div>
+          `;
+          
+          lawyerGrid.appendChild(lawyerCard);
+        });
+      } catch (error) {
+        lawyerGrid.innerHTML = '<div class="error-message">Failed to load lawyers. Please try again.</div>';
+        console.error('Error loading lawyers:', error);
+      }
+    }
+
+    /**
+     * Handle lawyer selection
+     */
+    function selectLawyer(lawyerId) {
+      appointmentData.lawyer = lawyers[lawyerId];
+      
+      // Update UI
+      document.querySelectorAll('.lawyer-card').forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      step2NextBtn.disabled = false;
+    }
+
+    /**
+     * Calendar rendering functions
+     */
+    function renderCalendar() {
+      const monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"];
+      
+      document.getElementById('calendar-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      
+      // Get first day of month and total days
+      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      // Clear calendar
+      const calendarDaysGrid = document.getElementById('calendar-days');
+      calendarDaysGrid.innerHTML = '';
+      
+      // Add empty cells for days before the 1st
+      for (let i = 0; i < firstDay; i++) {
+          const emptyDay = document.createElement('div');
+          emptyDay.className = 'calendar-day disabled';
+          calendarDaysGrid.appendChild(emptyDay);
+      }
+      
+      // Get today's date
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      // Add days of the month
+      for (let day = 1; day <= daysInMonth; day++) {
+          const dayElement = document.createElement('div');
+          dayElement.textContent = day;
+          dayElement.className = 'calendar-day available';
+          
+          const cellDate = new Date(currentYear, currentMonth, day);
+          cellDate.setHours(0, 0, 0, 0);
+          
+          if (cellDate < today) {
+              dayElement.className = 'calendar-day disabled';
+          } else if (cellDate.getTime() === today.getTime()) {
+              dayElement.classList.add('today');
+          }
+          
+          dayElement.addEventListener('click', () => {
+              if (cellDate >= today) {
+                  selectDate(day, cellDate);
+              }
+          });
+          
+          calendarDaysGrid.appendChild(dayElement);
+      }
+    }
+
+    function prevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+      }
+      renderCalendar();
+      resetTimeSelection();
+    }
+
+    function nextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+      }
+      renderCalendar();
+      resetTimeSelection();
+    }
+
+    async function selectDate(day, date) {
+      selectedDate = date;
+      appointmentData.date = date.toISOString().split('T')[0];
+      
+      // Update UI
+      document.querySelectorAll('.calendar-day').forEach(dayEl => {
+          dayEl.classList.remove('selected');
+      });
+      
+      const days = document.querySelectorAll('.calendar-day:not(.disabled)');
+      days.forEach(dayEl => {
+          if (parseInt(dayEl.textContent) === day) {
+              dayEl.classList.add('selected');
+          }
+      });
+      
+      // Show time slots container
+      document.getElementById('time-slots-container').style.display = 'block';
+      document.getElementById('selected-date-text').textContent = date.toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+      });
+      
+      // Load available time slots
+      await loadAvailableTimeSlots();
+      
+      resetTimeSelection();
+    }
+
+    function resetTimeSelection() {
+      appointmentData.time = null;
+      document.querySelectorAll('.time-slot').forEach(slot => {
+          slot.classList.remove('selected');
+      });
+      document.getElementById('step3-next').disabled = true;
+    }
+
+    function selectTime(time) {
+      appointmentData.time = time;
+      
+      document.querySelectorAll('.time-slot').forEach(slot => {
+          slot.classList.remove('selected');
+      });
+      
+      event.currentTarget.classList.add('selected');
+      document.getElementById('step3-next').disabled = false;
+    }
+
+    /**
+     * Update confirmation details
+     */
+    function updateConfirmationDetails() {
+      document.getElementById('confirm-case-type').textContent = appointmentData.caseType;
+      document.getElementById('confirm-description').textContent = appointmentData.description;
+      document.getElementById('confirm-lawyer').textContent = appointmentData.lawyer.name;
+      
+      const date = new Date(appointmentData.date);
+      const formattedDate = date.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+      });
+      
+      document.getElementById('confirm-datetime').textContent = `${formattedDate} at ${appointmentData.time}`;
+    }
+
+    /**
+     * Submit appointment
+     */
+    function submitAppointment() {
+      const phone = document.getElementById('contact-phone').value.trim();
+      if (!phone) {
+          alert('Please enter your contact phone number.');
+          return;
+      }
+      
+      appointmentData.phone = phone;
+      
+      // Save to localStorage
+      const appointments = JSON.parse(localStorage.getItem('lawConnectAppointments') || '[]');
+      appointments.push(appointmentData);
+      localStorage.setItem('lawConnectAppointments', JSON.stringify(appointments));
+      
+      // Show success
+      document.getElementById('step4').style.display = 'none';
+      document.getElementById('success-message').style.display = 'block';
+      
+      const successDate = new Date(appointmentData.date);
+      const formattedDate = successDate.toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+      });
+      
+      document.getElementById('success-details').textContent = 
+          `Your consultation with ${appointmentData.lawyer.name} is confirmed for ${formattedDate} at ${appointmentData.time}.`;
+    }
+  </script>
+</body>
+</html>
