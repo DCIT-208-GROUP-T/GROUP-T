@@ -9,12 +9,12 @@
   <title>Lawyer Dashboard | LawConnect</title>
   <link rel="stylesheet" href="LawyerDashboard.css" />
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-  <!-- Chart.js for analytics -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <main class="lawyer-dashboard-main-container">
-    <!-- Top Navigation Bar -->
+
     <header class="top-bar">
       <div class="top-bar-left">
         <h1 class="dashboard-title">LawConnect Dashboard</h1>
@@ -46,15 +46,13 @@
       </div>
     </header>
 
-    <!-- Search Bar -->
     <div class="search-container" id="searchContainer" style="display: none;">
       <input type="text" id="searchInput" placeholder="Search cases, clients, documents..." class="search-input">
       <button class="search-close" onclick="toggleSearch()">×</button>
     </div>
 
-    <!-- Overview Stats Cards -->
     <section class="stats-grid-enhanced">
-      <!-- Open Cases Card -->
+
       <div class="stat-card">
         <div class="stat-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
@@ -68,7 +66,6 @@
         </div>
       </div>
 
-      <!-- Appointments Card -->
       <div class="stat-card">
         <div class="stat-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
@@ -82,7 +79,6 @@
         </div>
       </div>
 
-      <!-- Messages Card -->
       <div class="stat-card">
         <div class="stat-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
@@ -96,7 +92,6 @@
         </div>
       </div>
 
-      <!-- Revenue Card -->
       <div class="stat-card">
         <div class="stat-icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
@@ -111,11 +106,10 @@
       </div>
     </section>
 
-    <!-- Main Content Grid -->
     <div class="dashboard-grid">
-      <!-- Left Column -->
+
       <div class="dashboard-column">
-        <!-- Today's Agenda -->
+
         <section class="dashboard-card">
           <div class="card-header">
             <h3>Today's Agenda</h3>
@@ -131,7 +125,6 @@
           </div>
         </section>
 
-        <!-- Recent Cases -->
         <section class="dashboard-card">
           <div class="card-header">
             <h3>Recent Cases</h3>
@@ -158,9 +151,8 @@
         </section>
       </div>
 
-      <!-- Right Column -->
       <div class="dashboard-column">
-        <!-- Performance Analytics -->
+
         <section class="dashboard-card">
           <div class="card-header">
             <h3>Performance Analytics</h3>
@@ -175,7 +167,6 @@
           </div>
         </section>
 
-        <!-- Quick Actions -->
         <section class="dashboard-card">
           <div class="card-header">
             <h3>Quick Actions</h3>
@@ -208,7 +199,6 @@
           </div>
         </section>
 
-        <!-- Upcoming Deadlines -->
         <section class="dashboard-card">
           <div class="card-header">
             <h3>Upcoming Deadlines</h3>
@@ -235,7 +225,6 @@
     </div>
   </main>
 
-  <!-- Bottom Navigation -->
   <footer class="footer-styling" role="navigation" aria-label="Main navigation">
     <nav class="bottom-nav">
       <button type="button" class="nav-item active" aria-label="Dashboard">
@@ -271,12 +260,11 @@
     </nav>
   </footer>
 
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="极://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
-  <!-- Enhanced JavaScript -->
   <script src="LawyerDashboard.js"></script>
 </body>
 </html>
+

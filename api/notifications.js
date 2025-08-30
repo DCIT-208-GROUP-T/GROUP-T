@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Notification = require('../models/Notification');
-// const { authenticate } = require('../middleware/auth');
 
-// Get all notifications for authenticated user
 router.get('/', async (req, res) => {
   try {
     const { limit = 50, skip = 0, unreadOnly, type } = req.query;
-    
+
     const notifications = await Notification.getUserNotifications(req.user._id, {
       limit: parseInt(limit),
       skip: parseInt(skip),
@@ -33,11 +31,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get unread notifications count
 router.get('/unread-count', async (req, res) => {
   try {
     const count = await Notification.getUnreadCount(req.user._id);
-    
+
     res.json({
       success: true,
       data: { count }
@@ -51,13 +48,12 @@ router.get('/unread-count', async (req, res) => {
   }
 });
 
-// Mark notifications as read
 router.put('/mark-read', async (req, res) => {
   try {
     const { notificationIds } = req.body;
-    
+
     await Notification.markAsRead(req.user._id, notificationIds);
-    
+
     res.json({
       success: true,
       message: notificationIds ? 'Notifications marked as read' : 'All notifications marked as read'
@@ -71,7 +67,6 @@ router.put('/mark-read', async (req, res) => {
   }
 });
 
-// Mark single notification as read
 router.put('/:id/read', async (req, res) => {
   try {
     const notification = await Notification.findOne({
@@ -101,7 +96,6 @@ router.put('/:id/read', async (req, res) => {
   }
 });
 
-// Delete notification
 router.delete('/:id', async (req, res) => {
   try {
     const notification = await Notification.findOneAndDelete({
@@ -129,7 +123,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Clear all notifications
 router.delete('/', async (req, res) => {
   try {
     await Notification.deleteMany({ userId: req.user._id });
@@ -147,7 +140,6 @@ router.delete('/', async (req, res) => {
   }
 });
 
-// Create notification (for internal use - typically called by other services)
 router.post('/', async (req, res) => {
   try {
     const {
@@ -190,3 +182,4 @@ router.post('/', async (req, res) => {
 });
 
 module.exports = router;
+

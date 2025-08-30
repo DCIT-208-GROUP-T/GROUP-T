@@ -1,4 +1,4 @@
-// Firebase configuration (ensure this matches your project)
+
 const firebaseConfig = {
   apiKey: "AIzaSyAlyIP81ut-Stj6Uyf123SOTNThfnNxYOs",
   authDomain: "lawconnect-swe2547.firebaseapp.com",
@@ -9,28 +9,21 @@ const firebaseConfig = {
   measurementId: "G-XYJC8JJ5NE" // Optional, if you use Analytics
 };
 
-// Initialize Firebase (only if not already initialized)
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// DOM Elements
 const loginForm = document.getElementById('loginForm');
 const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const rememberCheckbox = document.getElementById('remember');
 const loginBtn = document.querySelector('.login-btn');
 
-// Get account type from URL (if navigating from accTypeInterface.html)
 const urlParams = new URLSearchParams(window.location.search);
 const selectedAccountType = urlParams.get('type');
 
-/**
- * Handles the login form submission.
- * @param {Event} e The submit event.
- */
 loginForm.addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -43,7 +36,7 @@ loginForm.addEventListener('submit', async function(e) {
     alert('Please enter both your email and password.');
     return;
   }
- 
+
   // Set loading state for the button
   loginBtn.textContent = 'LOGGING IN...';
   loginBtn.disabled = true;
@@ -55,7 +48,6 @@ loginForm.addEventListener('submit', async function(e) {
     const user = userCredential.user;
     const urlParams = new URLSearchParams(window.location.search);
     const selectedAccountType = urlParams.get('type');
-    
 
     // Fetch user data from Firestore
     const userDoc = await db.collection('users').doc(user.uid).get(); 
@@ -150,9 +142,6 @@ loginForm.addEventListener('submit', async function(e) {
   }
 });
 
-/**
- * Auto-fills the email field if "Remember password" was checked previously.
- */
 document.addEventListener('DOMContentLoaded', function() {
   const rememberedEmail = localStorage.getItem('lawconnect_remembered_email');
   if (rememberedEmail) {
@@ -161,11 +150,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-/**
- * Allows submitting the form by pressing Enter key in input fields.
- */
 document.addEventListener('keypress', function(e) {
   if (e.key === 'Enter' && !loginBtn.disabled) {
     loginForm.dispatchEvent(new Event('submit'));
   }
 });
+

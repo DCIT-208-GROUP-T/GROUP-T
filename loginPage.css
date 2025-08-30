@@ -1,18 +1,17 @@
-/* Root CSS Variables */
+
 :root {
-  --primary-bg: #002E6D; /* Dark blue background */
-  --login-box-bg: rgba(0, 0, 0, 0.1); /* Semi-transparent black for login box */
-  --text-color-light: white; /* White text */
+  --primary-bg: #002E6D; 
+  --login-box-bg: rgba(0, 0, 0, 0.1); 
+  --text-color-light: white; 
   --input-padding: 0.6rem;
   --input-border-radius: 6px;
   --input-margin-bottom: 1.2rem;
-  --button-bg: #1A00FF; /* Blue button */
-  --button-hover-bg: #1500cc; /* Darker blue on hover */
+  --button-bg: #1A00FF; 
+  --button-hover-bg: #1500cc; 
   --font-family-main: 'Arial', sans-serif;
   --font-family-comic: 'Comic Sans MS', cursive, sans-serif;
 }
 
-/* Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -26,18 +25,16 @@ body, html {
   line-height: 1.6;
 }
 
-/* Full-screen Container */
 .login-container {
   background-color: var(--primary-bg);
   width: 100%;
-  min-height: 100vh; /* Use min-height for flexibility */
+  min-height: 100vh; 
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* Add some padding for smaller screens */
+  padding: 20px; 
 }
 
-/* Login Box */
 .login-box {
   background: var(--login-box-bg);
   padding: 2rem;
@@ -46,28 +43,25 @@ body, html {
   max-width: 400px;
   color: var(--text-color-light);
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 
-/* Welcome Header */
 .welcome-text {
   font-size: 2rem;
   margin-bottom: 1rem;
   font-family: var(--font-family-comic);
-  font-weight: bold; /* Ensure it stands out */
+  font-weight: bold; 
 }
 
-/* Gavel Icon */
 .gavel-icon {
   width: 60px;
-  height: auto; /* Maintain aspect ratio */
+  height: auto; 
   margin-bottom: 2rem;
-  display: block; /* Remove extra space below image */
+  display: block; 
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Form Styling */
 .login-form {
   display: flex;
   flex-direction: column;
@@ -88,43 +82,41 @@ input[type="password"] {
   border: none;
   margin-bottom: var(--input-margin-bottom);
   font-size: 1rem;
-  width: 100%; /* Ensure full width */
-  background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
-  color: #333; /* Dark text for input */
+  width: 100%; 
+  background-color: rgba(255, 255, 255, 0.9); 
+  color: #333; 
 }
 
 input[type="email"]::placeholder,
 input[type="password"]::placeholder {
-  color: #888; /* Placeholder color */
+  color: #888; 
 }
 
 input[type="email"]:focus,
 input[type="password"]:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(26, 0, 255, 0.5); /* Blue glow on focus */
+  box-shadow: 0 0 0 3px rgba(26, 0, 255, 0.5); 
 }
 
-/* Remember Me Checkbox */
 .remember-me {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 1.5rem;
   font-size: 0.85rem;
-  cursor: pointer; /* Indicate clickable */
+  cursor: pointer; 
 }
 
 .remember-me input[type="checkbox"] {
   margin-right: 0.5rem;
-  width: auto; /* Override full width for checkbox */
+  width: auto; 
 }
 
 .remember-me label {
-  margin-bottom: 0; /* Remove bottom margin for label */
+  margin-bottom: 0; 
   cursor: pointer;
 }
 
-/* Login Button */
 .login-btn {
   background-color: var(--button-bg);
   color: var(--text-color-light);
@@ -135,13 +127,13 @@ input[type="password"]:focus {
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  text-transform: uppercase; /* Uppercase text */
+  text-transform: uppercase; 
   letter-spacing: 0.5px;
 }
 
 .login-btn:hover {
   background-color: var(--button-hover-bg);
-  transform: translateY(-2px); /* Slight lift effect */
+  transform: translateY(-2px); 
 }
 
 .login-btn:disabled {
@@ -150,16 +142,14 @@ input[type="password"]:focus {
   opacity: 0.7;
 }
 
-/* Brand Name */
 .brand-name {
   margin-top: 2rem;
   font-family: var(--font-family-comic);
   font-size: 1.2rem;
-  font-style: italic; /* Consistent with other footers */
-  color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+  font-style: italic; 
+  color: rgba(255, 255, 255, 0.8); 
 }
 
-/* Responsive Design */
 @media (max-width: 500px) {
   .login-box {
     padding: 1.5rem;
@@ -182,3 +172,4 @@ input[type="password"]:focus {
     font-size: 1rem;
   }
 }
+

@@ -1,4 +1,4 @@
-// Notifications API Service
+
 class NotificationsService {
     constructor() {
         this.baseUrl = '/api/notifications';
@@ -14,7 +14,7 @@ class NotificationsService {
                 this.currentUser = JSON.parse(userData);
                 return true;
             }
-            
+
             // If no user in localStorage, try to get from Firebase auth
             if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
                 const firebaseUser = firebase.auth().currentUser;
@@ -26,7 +26,7 @@ class NotificationsService {
                     return true;
                 }
             }
-            
+
             console.warn('No authenticated user found');
             return false;
         } catch (error) {
@@ -39,7 +39,7 @@ class NotificationsService {
     async getNotifications(options = {}) {
         try {
             const { limit = 50, skip = 0, unreadOnly = false, type = null } = options;
-            
+
             const params = new URLSearchParams();
             params.append('limit', limit);
             params.append('skip', skip);
@@ -179,7 +179,7 @@ class NotificationsService {
         const now = new Date();
         const notificationTime = new Date(timestamp);
         const diffInSeconds = Math.floor((now - notificationTime) / 1000);
-        
+
         if (diffInSeconds < 60) {
             return 'Just now';
         } else if (diffInSeconds < 3600) {
@@ -210,10 +210,9 @@ class NotificationsService {
     }
 }
 
-// Initialize notifications service
 const notificationsService = new NotificationsService();
 
-// Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = notificationsService;
 }
+

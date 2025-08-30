@@ -1,4 +1,4 @@
-// Enhanced Client Dashboard JavaScript
+
 const firebaseConfig = {
   apiKey: "AIzaSyAlyIP81ut-Stj6Uyf123SOTNThfnNxYOs",
   authDomain: "lawconnect-swe2547.firebaseapp.com",
@@ -8,16 +8,13 @@ const firebaseConfig = {
   app极Id: "1:584082304319:web:106b26321b34f64ac9b78a"
 };
 
-// Initialize Firebase for authentication only
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 
-// API Base URL
 const API_BASE_URL = 'http://localhost:3000/api';
 
-// DOM Elements
 const clientNameEl = document.getElementById('clientName');
 const activeCasesCountEl = document.getElementById('activeCasesCount');
 const upcomingAppointmentsCountEl = document.getElementById('upcomingAppointmentsCount');
@@ -30,14 +27,11 @@ const navItems = document.querySelectorAll('.nav-item');
 
 let currentUserData = null;
 
-/**
- * Enhanced client dashboard loader with professional UI integration
- */
 async function loadEnhancedClientDashboard() {
   try {
     // Check user session
     const userSession = JSON.parse(localStorage.getItem('lawconnect_user') || sessionStorage.getItem('lawconnect_user'));
-    
+
     if (!userSession || userSession.accountType !== 'client') {
       console.warn('No client session found. Redirecting to login.');
       window.location.href = 'loginPage.html';
@@ -80,9 +74,6 @@ async function loadEnhancedClientDashboard() {
   }
 }
 
-/**
- * Fetch appointments from API
- */
 async function fetchAppointments() {
   try {
     const response = await fetch(`${API_BASE_URL}/appointments/client/${currentUserData._id}?upcoming=true`);
@@ -96,9 +87,6 @@ async function fetchAppointments() {
   }
 }
 
-/**
- * Fetch cases from API
- */
 async function fetchCases() {
   try {
     const response = await fetch(`${API_BASE_URL}/cases/client/${currentUserData._id}`);
@@ -112,9 +100,6 @@ async function fetchCases() {
   }
 }
 
-/**
- * Fetch documents from API
- */
 async function fetchDocuments() {
   try {
     const response = await fetch(`${API_BASE_URL}/documents/client/${currentUserData._id}`);
@@ -128,9 +113,6 @@ async function fetchDocuments() {
   }
 }
 
-/**
- * Fetch messages from API
- */
 async function fetchMessages() {
   try {
     const response = await fetch(`${API_BASE_URL}/messages/client/${currentUserData._id}?unread=true`);
@@ -144,9 +126,6 @@ async function fetchMessages() {
   }
 }
 
-/**
- * Fetch notifications from API
- */
 async function fetchNotifications() {
   try {
     const response = await fetch(`${API_BASE_URL}/notifications/client/${currentUserData._id}?unread=true`);
@@ -160,9 +139,6 @@ async function fetchNotifications() {
   }
 }
 
-/**
- * Update dashboard statistics
- */
 function updateStats({ activeCases, appointments, documents, messages, notifications }) {
   activeCasesCountEl.textContent = activeCases;
   upcomingAppointmentsCountEl.textContent = appointments;
@@ -172,9 +148,6 @@ function updateStats({ activeCases, appointments, documents, messages, notificat
   notificationBadgeEl.style.display = notifications > 0 ? 'flex' : 'none';
 }
 
-/**
- * Render appointments list
- */
 function renderAppointments(appointments) {
   upcomingClientAppointmentsEl.innerHTML = '';
 
@@ -211,9 +184,6 @@ function renderAppointments(appointments) {
   });
 }
 
-/**
- * Render cases list
- */
 function renderCases(cases) {
   clientCasesEl.innerHTML = '';
 
@@ -232,10 +202,10 @@ function renderCases(cases) {
   cases.forEach(caseData => {
     const caseItem = document.createElement('div');
     caseItem.className = 'case-item';
-    
+
     const statusClass = caseData.status === 'active' ? 'status-active' : 
                        caseData.status === 'pending' ? 'status-pending' : '';
-    
+
     caseItem.innerHTML = `
       <div class="case-info">
         <h4>${caseData.title || 'Untitled Case'}</h4>
@@ -248,23 +218,17 @@ function renderCases(cases) {
   });
 }
 
-/**
- * View case details
- */
 function viewCase(caseId) {
   window.location.href = `CaseManagementDashboard.html?caseId=${caseId}`;
 }
 
-/**
- * Setup event listeners
- */
 function setupEventListeners() {
   // Navigation items
   navItems.forEach((item, index) => {
     item.addEventListener('click', function() {
       navItems.forEach(nav => nav.classList.remove('active'));
       this.classList.add('active');
-      
+
       switch(index) {
         case 0: // Dashboard
           // Already on dashboard
@@ -283,9 +247,6 @@ function setupEventListeners() {
   setupRealTimeUpdates();
 }
 
-/**
- * Setup real-time updates
- */
 function setupRealTimeUpdates() {
   // Simulate real-time updates (replace with actual Firebase listeners)
   setInterval(async () => {
@@ -294,7 +255,7 @@ function setupRealTimeUpdates() {
         fetchMessages(),
         fetchNotifications()
       ]);
-      
+
       newMessagesCountEl.textContent = messages.length;
       notificationBadgeEl.textContent = notifications.length > 9 ? '9+' : notifications.length;
       notificationBadgeEl.style.display = notifications.length > 0 ? 'flex' : 'none';
@@ -304,9 +265,6 @@ function setupRealTimeUpdates() {
   }, 30000); // Update every 30 seconds
 }
 
-/**
- * Show error message
- */
 function showError(message) {
   // Create error toast notification
   const errorToast = document.createElement('div');
@@ -324,16 +282,13 @@ function showError(message) {
   `;
   errorToast.textContent = message;
   document.body.appendChild(errorToast);
-  
+
   setTimeout(() => {
     errorToast.remove();
   }, 5000);
 }
 
-/**
- * Initialize dashboard when DOM is loaded
- */
 document.addEventListener('DOMContentLoaded', loadEnhancedClientDashboard);
 
-// Export functions for global access
 window.viewCase = viewCase;
+

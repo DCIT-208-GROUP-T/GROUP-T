@@ -8,7 +8,7 @@
   <meta name="author" content="LawConnect Team">
   <title>Case Dashboard | LawConnect</title>
   <link rel="stylesheet" href="CaseManagementDashboard.css">
-  <!-- Favicon (optional) -->
+
   <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -21,14 +21,14 @@
         <button type="button" class="action-btn">Search</button>
       </div>
     </header>
-    
+
     <nav class="filter-tabs" aria-label="Case Filters">
       <button type="button" class="filter-tab active" data-filter="all">All Cases</button>
       <button type="button" class="filter-tab" data-filter="active">Active</button>
       <button type="button" class="filter-tab" data-filter="pending">Pending</button>
       <button type="button" class="filter-tab" data-filter="completed">Completed</button>
     </nav>
-    
+
     <section class="stats-grid" aria-label="Case Statistics">
       <div class="stat-card">
         <h3>Active Cases</h3>
@@ -47,14 +47,14 @@
         <p class="stat-value" id="documents-count">0</p>
       </div>
     </section>
-    
+
     <section class="active-cases-section" aria-labelledby="activeCasesTitle">
       <div class="case-section-header">
         <h2 id="activeCasesTitle">Active Cases</h2>
         <button type="button" class="new-case-btn" id="new-case-btn">+ New Case</button>
       </div>
-      
-      <div class="table-responsive"> <!-- Added for responsive table -->
+
+      <div class="table-responsive"> 
         <table class="case-table" id="cases-table" role="table" aria-live="polite">
           <thead>
             <tr>
@@ -66,17 +66,17 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Cases will be dynamically inserted here -->
+
             <tr><td colspan="5" class="no-cases-message">No cases to display.</td></tr>
           </tbody>
         </table>
       </div>
     </section>
-    
+
     <section class="documents-preview-section" aria-labelledby="recentDocumentsTitle">
       <h2 id="recentDocumentsTitle">Recent Documents</h2>
       <div class="documents-grid" id="documents-grid" aria-live="polite">
-        <!-- Documents will be dynamically inserted here -->
+
         <p class="no-documents-message">No recent documents to display.</p>
       </div>
     </section>
@@ -85,3 +85,4 @@
   <script src="CaseManagementDashboard.js"></script>
 </body>
 </html>
+

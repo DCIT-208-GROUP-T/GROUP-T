@@ -77,22 +77,20 @@ const caseSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better query performance
 caseSchema.index({ clientId: 1 });
 caseSchema.index({ lawyerId: 1 });
 caseSchema.index({ status: 1 });
 caseSchema.index({ caseType: 1 });
 
-// Virtual for appointments related to this case
 caseSchema.virtual('appointments', {
   ref: 'Appointment',
   localField: '_id',
   foreignField: 'caseId'
 });
 
-// Method to check if case is active
 caseSchema.methods.isActive = function() {
   return this.status === 'active' || this.status === 'pending' || this.status === 'review';
 };
 
 module.exports = mongoose.model('Case', caseSchema);
+

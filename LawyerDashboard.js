@@ -1,7 +1,6 @@
-// API Base URL
+
 const API_BASE_URL = 'http://localhost:3000/api';
 
-// DOM Elements
 const welcomeMessageEl = document.getElementById('welcomeMessage');
 const openCasesCountEl = document.getElementById('openCasesCount');
 const scheduledCountEl = document.getElementById('scheduledCount');
@@ -17,7 +16,6 @@ const searchInput = document.getElementById('searchInput');
 let currentUserData = null;
 let revenueChart = null;
 
-// Utility Functions
 function toggleSearch() {
   searchContainer.style.display = searchContainer.style.display === 'none' ? 'flex' : 'none';
   if (searchContainer.style.display === 'flex') {
@@ -106,7 +104,6 @@ function updateAnalytics(timeframe) {
   });
 }
 
-// API utility functions
 async function fetchData(endpoint, options = {}) {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
     if (!response.ok) {
@@ -115,7 +112,6 @@ async function fetchData(endpoint, options = {}) {
     return response.json();
 }
 
-// Load lawyer dashboard data
 async function loadLawyerDashboard() {
   const userSession = JSON.parse(localStorage.getItem('lawconnect_user') || sessionStorage.getItem('lawconnect_user'));
 
@@ -137,9 +133,9 @@ async function loadLawyerDashboard() {
     const appointmentsForToday = appointments.filter(appt => 
       appt.date === today.toISOString().split('T')[0] && appt.status === 'scheduled'
     );
-    
+
     todaysAgendaEl.innerHTML = ''; // Clear existing agenda items
-    
+
     if (appointmentsForToday.length === 0) {
       todaysAgendaEl.innerHTML = '<div class="agenda-item no-data">No appointments scheduled for today.</div>';
       scheduledCountEl.textContent = '0';
@@ -200,7 +196,6 @@ async function loadLawyerDashboard() {
   }
 }
 
-// Fallback to mock data
 function loadMockData() {
   const today = new Date();
   const mockAppointments = [
@@ -233,7 +228,6 @@ function loadMockData() {
   updateAnalytics('month');
 }
 
-// Event Listeners
 navItems.forEach((item, index) => {
   item.addEventListener('click', function() {
     navItems.forEach(nav => nav.classList.remove('active'));
@@ -258,7 +252,6 @@ navItems.forEach((item, index) => {
   });
 });
 
-// Search functionality
 searchInput.addEventListener('keypress', function(e) {
   if (e.key === 'Enter') {
     alert(`Searching for: ${this.value}`);
@@ -267,7 +260,6 @@ searchInput.addEventListener('keypress', function(e) {
   }
 });
 
-// Initialize dashboard
 document.addEventListener('DOMContentLoaded', function() {
   // Load saved theme
   const savedTheme = localStorage.getItem('theme');
@@ -278,5 +270,5 @@ document.addEventListener('DOMContentLoaded', function() {
   loadLawyerDashboard();
 });
 
-// Real-time updates
 setInterval(loadLawyerDashboard, 300000); // Refresh every 5 minutes
+

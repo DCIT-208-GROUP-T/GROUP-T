@@ -1,6 +1,5 @@
 const http = require('http');
 
-// Test GET /api/users
 console.log('Testing GET /api/users...');
 const getReq = http.request('http://localhost:3000/api/users', (res) => {
   let data = '';
@@ -67,7 +66,7 @@ function testGetUsersAgain() {
 
 function testOtherEndpoints() {
   console.log('\nTesting other endpoints...');
-  
+
   // Test /api/cases
   http.request('http://localhost:3000/api/cases', (res) => {
     let data = '';
@@ -101,3 +100,4 @@ function testOtherEndpoints() {
     });
   }).end();
 }
+

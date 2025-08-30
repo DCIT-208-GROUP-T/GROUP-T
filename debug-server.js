@@ -4,17 +4,14 @@ const PORT = 3000;
 
 console.log('Testing basic server setup...');
 
-// Test basic middleware
 app.use(express.json());
 console.log('JSON middleware loaded');
 
-// Test basic route
 app.get('/test', (req, res) => {
   res.json({ message: 'Test route working' });
 });
 console.log('Test route loaded');
 
-// Test route imports one by one
 console.log('Testing route imports...');
 
 try {
@@ -60,3 +57,4 @@ try {
 app.listen(PORT, () => {
   console.log(`Debug server running on http://localhost:${PORT}`);
 });
+

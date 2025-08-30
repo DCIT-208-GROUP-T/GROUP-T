@@ -50,11 +50,9 @@ const notificationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for efficient querying
 notificationSchema.index({ userId: 1, isRead: 1, createdAt: -1 });
 notificationSchema.index({ userId: 1, createdAt: -1 });
 
-// Static method to get notifications for a user
 notificationSchema.statics.getUserNotifications = async function(userId, options = {}) {
   const { 
     limit = 50, 
@@ -64,11 +62,11 @@ notificationSchema.statics.getUserNotifications = async function(userId, options
   } = options;
 
   const query = { userId };
-  
+
   if (unreadOnly) {
     query.isRead = false;
   }
-  
+
   if (type) {
     query.type = type;
   }
@@ -81,10 +79,9 @@ notificationSchema.statics.getUserNotifications = async function(userId, options
     .exec();
 };
 
-// Static method to mark notifications as read
 notificationSchema.statics.markAsRead = async function(userId, notificationIds = null) {
   const query = { userId, isRead: false };
-  
+
   if (notificationIds) {
     query._id = { $in: notificationIds };
   }
@@ -92,18 +89,15 @@ notificationSchema.statics.markAsRead = async function(userId, notificationIds =
   return this.updateMany(query, { isRead: true });
 };
 
-// Static method to get unread count
 notificationSchema.statics.getUnreadCount = async function(userId) {
   return this.countDocuments({ userId, isRead: false });
 };
 
-// Instance method to mark as read
 notificationSchema.methods.markAsRead = function() {
   this.isRead = true;
   return this.save();
 };
 
-// Pre-save middleware to ensure proper formatting
 notificationSchema.pre('save', function(next) {
   if (this.isModified('title')) {
     this.title = this.title.trim();
@@ -115,3 +109,4 @@ notificationSchema.pre('save', function(next) {
 });
 
 module.exports = mongoose.model('Notification', notificationSchema);
+

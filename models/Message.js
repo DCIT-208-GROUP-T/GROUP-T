@@ -50,24 +50,20 @@ const messageSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better query performance
 messageSchema.index({ senderId: 1 });
 messageSchema.index({ receiverId: 1 });
 messageSchema.index({ caseId: 1 });
 messageSchema.index({ createdAt: -1 });
 
-// Compound index for conversation queries
 messageSchema.index({ senderId: 1, receiverId: 1 });
 messageSchema.index({ receiverId: 1, senderId: 1 });
 
-// Method to mark message as read
 messageSchema.methods.markAsRead = function() {
   this.isRead = true;
   this.readAt = new Date();
   return this.save();
 };
 
-// Static method to get conversation between two users
 messageSchema.statics.getConversation = function(userId1, userId2, caseId = null, limit = 50) {
   const query = {
     $or: [
@@ -89,3 +85,4 @@ messageSchema.statics.getConversation = function(userId1, userId2, caseId = null
 };
 
 module.exports = mongoose.model('Message', messageSchema);
+

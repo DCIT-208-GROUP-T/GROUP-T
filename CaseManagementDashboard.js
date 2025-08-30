@@ -1,6 +1,5 @@
 const API_BASE_URL = 'http://localhost:3000/api'; // API Base URL
 
-// Mock documents data (will be replaced with Firestore data later)
 const mockDocuments = [
   {
     id: 1,
@@ -39,7 +38,6 @@ const mockDocuments = [
   }
 ];
 
-// DOM Elements
 const activeCountEl = document.getElementById('active-count');
 const pendingCountEl = document.getElementById('pending-count');
 const hearingCountEl = document.getElementById('hearing-count');
@@ -53,9 +51,6 @@ const noDocumentsMessage = documentsGrid.querySelector('.no-documents-message');
 
 let currentFilter = 'all'; // Default filter
 
-/**
- * Loads and displays the dashboard data.
- */
 async function loadDashboard() {
   const userSession = JSON.parse(localStorage.getItem('lawconnect_user') || sessionStorage.getItem('lawconnect_user'));
   if (!userSession) {
@@ -95,10 +90,6 @@ async function loadDashboard() {
   }
 }
 
-/**
- * Renders the cases in the table.
- * @param {Array} casesToRender The array of case objects to display.
- */
 function renderCasesTable(casesToRender) {
   casesTableBody.innerHTML = ''; // Clear existing rows
 
@@ -138,10 +129,6 @@ function renderCasesTable(casesToRender) {
   });
 }
 
-/**
- * Renders the recent documents in the grid.
- * @param {Array} documentsToRender The array of document objects to display.
- */
 function renderDocumentsGrid(documentsToRender) {
   documentsGrid.innerHTML = ''; // Clear existing documents
 
@@ -173,21 +160,11 @@ function renderDocumentsGrid(documentsToRender) {
   });
 }
 
-/**
- * Formats a date string into a more readable format.
- * @param {string} dateStr The date string to format (e.g., "YYYY-MM-DD").
- * @returns {string} The formatted date string.
- */
 function formatDate(dateStr) {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
   return new Date(dateStr).toLocaleDateString('en-US', options);
 }
 
-/**
- * Returns an emoji icon based on document type.
- * @param {string} type The type of the document (e.g., "pdf", "doc", "image").
- * @returns {string} An emoji representing the document type.
- */
 function getDocIcon(type) {
   const icons = {
     'pdf': '📄',
@@ -200,58 +177,41 @@ function getDocIcon(type) {
   return icons[type] || '📋'; // Default clipboard icon
 }
 
-/**
- * Simulates viewing a case.
- * @param {number} caseId The ID of the case to view.
- */
 function viewCase(caseId) {
   alert(`Viewing case ID: ${caseId}\n\n(This would open a detailed case view in a real application.)`);
   // In a real app, navigate to a detailed case view page:
   // window.location.href = `case-details.html?id=${caseId}`;
 }
 
-/**
- * Simulates messaging a lawyer.
- * @param {string} lawyerName The name of the lawyer to message.
- */
 function messageLawyer(lawyerName) {
   alert(`Opening message thread with ${lawyerName}.\n\n(This would link to a messaging interface.)`);
   // In a real app, navigate to the messages page with pre-selected recipient:
   // window.location.href = `messages.html?recipient=${encodeURIComponent(lawyerName)}`;
 }
 
-/**
- * Simulates viewing a document.
- * @param {number} docId The ID of the document to view.
- * @param {string} docName The name of the document.
- */
 function viewDocument(docId, docName) {
   alert(`Opening document: "${docName}" (ID: ${docId})\n\n(This would open the document in a viewer or download it.)`);
   // In a real app, you might open a modal or navigate to a document viewer:
   // window.open(`document-viewer.html?id=${docId}`, '_blank');
 }
 
-// Event Listeners
-
-// New case button handler
 newCaseBtn.addEventListener('click', () => {
   alert('Initiating new case submission.\n\n(This would open a case intake form.)');
   // window.location.href = 'new-case-form.html';
 });
 
-// Filter tab switching
 filterTabs.forEach(tab => {
   tab.addEventListener('click', function() {
     // Remove 'active' class from all tabs
     filterTabs.forEach(t => t.classList.remove('active'));
     // Add 'active' class to the clicked tab
     this.classList.add('active');
-    
+
     // Update current filter and reload dashboard
     currentFilter = this.dataset.filter;
     loadDashboard();
   });
 });
 
-// Initial load of the dashboard when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', loadDashboard);
+

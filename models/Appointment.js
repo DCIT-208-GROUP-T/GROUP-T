@@ -41,10 +41,10 @@ const appointmentSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better query performance
 appointmentSchema.index({ clientId: 1 });
 appointmentSchema.index({ lawyerId: 1 });
 appointmentSchema.index({ caseId: 1 });
 appointmentSchema.index({ date: 1 });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);
+

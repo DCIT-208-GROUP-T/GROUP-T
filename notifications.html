@@ -160,7 +160,7 @@
     </header>
 
     <div class="notification-list" id="notification-list">
-      <!-- Notifications will be loaded here -->
+
       <div class="empty-state">
         <i>🔔</i>
         <h3>No notifications yet</h3>
@@ -194,13 +194,11 @@
     </nav>
   </footer>
 
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  
-  <!-- Notifications Service -->
+
   <script src="notifications.js"></script>
-  
+
   <script>
     let currentFilter = 'all';
     let notifications = [];
@@ -208,7 +206,7 @@
     // Load notifications from backend
     async function loadNotifications() {
       const notificationList = document.getElementById('notification-list');
-      
+
       try {
         // Show loading state
         notificationList.innerHTML = `
@@ -233,7 +231,7 @@
 
         if (response.success) {
           notifications = response.data;
-          
+
           if (notifications.length === 0) {
             notificationList.innerHTML = `
               <div class="empty-state">
@@ -287,7 +285,7 @@
       try {
         // Mark notification as read
         await notificationsService.markNotificationAsRead(notificationId);
-        
+
         // Navigate to action URL if provided
         if (actionUrl) {
           window.location.href = actionUrl;
@@ -324,14 +322,14 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', async function() {
       await loadNotifications();
-      
+
       // Event listeners
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => filterNotifications(btn.dataset.filter));
       });
-      
+
       document.querySelector('.mark-all-read-btn').addEventListener('click', markAllAsRead);
-      
+
       // Click on notification to mark as read
       document.addEventListener('click', async function(e) {
         const notificationItem = e.target.closest('.notification-item');
@@ -362,7 +360,7 @@
         const unreadCountBefore = notifications.filter(n => !n.isRead).length;
         await loadNotifications();
         const unreadCountAfter = notifications.filter(n => !n.isRead).length;
-        
+
         // Show browser notification if new notifications arrived
         if (unreadCountAfter > unreadCountBefore && 'Notification' in window && Notification.permission === 'granted') {
           const newNotifications = notifications.filter(n => !n.isRead).slice(0, unreadCountAfter - unreadCountBefore);
@@ -380,3 +378,4 @@
   </script>
 </body>
 </html>
+

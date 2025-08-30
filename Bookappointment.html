@@ -413,7 +413,7 @@
         border-radius: 0;
         box-shadow: none;
       }
-      
+
       .time-slots {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -429,7 +429,7 @@
     <header class="appointment-header">
       <h1>Book a Consultation</h1>
     </header>
-    
+
     <div class="progress-bar">
       <div class="progress-step active" id="step1-indicator">
         <div class="极 step-number">1</div>
@@ -448,9 +448,9 @@
         <div class="step-label">Confirm</div>
       </div>
     </div>
-    
+
     <div class="form-content-container">
-      <!-- Step 1: Case Details -->
+
       <div class="step-content active" id="step1">
         <div class="form-group">
           <label for="case-type">Case Type</label>
@@ -463,41 +463,39 @@
             <option value="Immigration">Immigration</option>
           </select>
         </div>
-        
+
         <div class="form-group">
           <label for="description">Brief Description</label>
           <input type="text" id="description" placeholder="Describe your legal concern..." required>
         </div>
-        
+
         <div class="button-group">
           <div></div>
           <button type="button" class="btn-primary" id="step1-next">Next: Choose Lawyer</button>
         </div>
       </div>
-      
-      <!-- Step 2: Choose Lawyer -->
+
       <div class="step-content" id="step2">
         <div class="form-group">
           <label>Select a lawyer</label>
           <p>Based on your case type, we recommend these specialists:</p>
-          
+
           <div class="lawyer-grid" id="lawyer-grid">
-            <!-- Lawyer cards will be dynamically populated here -->
+
             <div class="loading-message">Loading available lawyers...</div>
           </div>
         </div>
-        
+
         <div class="button-group">
           <button type="button" class="btn-outline" onclick="prevStep()">Back</button>
           <button type="button" class="btn-primary" id="step2-next" disabled>Next: Schedule</button>
         </div>
       </div>
-      
-      <!-- Step 3: Schedule Appointment -->
+
       <div class="step-content" id="step3">
         <div class="form-group">
           <label>Select date and time</label>
-          
+
           <div class="calendar-container">
             <div class="calendar-header">
               <div class="calendar-nav">
@@ -506,14 +504,14 @@
                 <button type="button" onclick="nextMonth()">→</button>
               </div>
             </div>
-            
+
             <div class="calendar-weekdays">
               <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
             </div>
-            
+
             <div class="calendar-grid" id="calendar-days"></div>
           </div>
-          
+
           <div id="time-slots-container" style="display: none; margin-top: 20px;">
             <label>Available time slots for <span id="selected-date-text"></span>:</label>
             <div class="time-slots" id="time-slots">
@@ -526,56 +524,54 @@
             </div>
           </div>
         </div>
-        
+
         <div class="button-group">
           <button type="button" class="btn-outline" onclick="prevStep()">Back</button>
           <button type="button" class="btn-primary" id="step3-next" disabled>Next: Confirm</button>
         </div>
       </div>
-      
-      <!-- Step 4: Confirmation -->
+
       <div class="step-content" id="step4">
         <div class="confirmation-card">
           <h3>Appointment Summary</h3>
-          
+
           <div class="confirmation-row">
             <span class="confirmation-label">Case Type:</span>
             <span class="confirmation-value" id="confirm-case-type"></span>
           </div>
-          
+
           <div class="confirmation-row">
             <span class="confirmation-label">Description:</span>
             <span class="confirmation-value" id="confirm-description"></span>
           </div>
-          
+
           <div class="confirmation-row">
             <span class="confirmation-label">Lawyer:</span>
             <span class="confirmation-value" id="confirm-lawyer"></span>
           </div>
-          
+
           <div class="confirmation-row">
             <span class="confirmation-label">Date & Time:</span>
             <span class="confirmation-value" id="confirm-datetime"></span>
           </div>
         </div>
-        
+
         <div class="form-group">
           <label for="contact-phone">Contact Phone</label>
           <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567" required>
         </div>
-        
+
         <div class="button-group">
           <button type="button" class="btn-outline" onclick="prevStep()">Back</button>
           <button type="button" class="btn-primary" id="book-appointment-btn">Book Appointment</button>
         </div>
       </div>
-      
-      <!-- Success Message -->
+
       <div id="success-message">
         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="#38a169">
           <path d="M12 0a12 12 0 1 0 0 24 12 12 0 0 0 0-24zm-2 17l-5-5 1.4-1.4 3.6 3.6 6 7.6-7.6L19 8l-9 9z"/>
         </svg>
-        
+
         <h3>Appointment Booked Successfully!</h3>
         <p id="success-details"></p>
         <button type="button" class="btn-primary" onclick="window.location.href='ClientDashboard.html'">Return to Dashboard</button>
@@ -679,27 +675,21 @@
     // DOM Elements
     let stepContents, stepIndicators, caseTypeSelect, descriptionInput, step2NextBtn, step3NextBtn;
 
-    /**
-     * Initialize everything when DOM is loaded
-     */
     document.addEventListener('DOMContentLoaded', function() {
       console.log('🚀 LawConnect Booking System Initialized');
-      
+
       // Initialize DOM elements
       initializeElements();
-      
+
       // Setup event listeners
       setupEventListeners();
-      
+
       // Initialize calendar
       renderCalendar();
-      
+
       console.log('✅ Book Appointment System initialized successfully');
     });
 
-    /**
-     * Initialize DOM elements
-     */
     function initializeElements() {
       stepContents = document.querySelectorAll('.step-content');
       stepIndicators = document.querySelectorAll('.progress-step');
@@ -709,9 +699,6 @@
       step3NextBtn = document.getElementById('step3-next');
     }
 
-    /**
-     * Setup all event listeners
-     */
     function setupEventListeners() {
       // Step 1: Case Details -> Choose Lawyer
       document.getElementById('step1-next').addEventListener('click', () => nextStep(1));
@@ -726,9 +713,6 @@
       document.getElementById('book-appointment-btn').addEventListener('click', submitAppointment);
     }
 
-    /**
-     * Navigate to next step
-     */
     function nextStep(step) {
       // Validate current step
       if (step === 1) {
@@ -743,44 +727,35 @@
 
       // Update UI for step change
       updateStepUI(step, step + 1);
-      
+
       // Special actions for specific steps
       if (step + 1 === 4) {
         updateConfirmationDetails();
       }
     }
 
-    /**
-     * Navigate to previous step
-     */
     function prevStep() {
       updateStepUI(currentStep, currentStep - 1);
     }
 
-    /**
-     * Update UI for step navigation
-     */
     function updateStepUI(fromStep, toStep) {
       // Hide current step, show next step
       stepContents[fromStep - 1].classList.remove('active');
       stepIndicators[fromStep - 1].classList.remove('active');
-      
+
       stepContents[toStep - 1].classList.add('active');
       stepIndicators[toStep - 1].classList.add('active');
-      
+
       // Mark completed steps
       if (toStep > fromStep) {
         stepIndicators[fromStep - 1].classList.add('completed');
       } else {
         stepIndicators[fromStep - 1].classList.remove('completed');
       }
-      
+
       currentStep = toStep;
     }
 
-    /**
-     * Validate Step 1: Case Details
-     */
     function validateStep1() {
       if (!caseTypeSelect.value) {
         alert('Please select a case type.');
@@ -790,15 +765,12 @@
         alert('Please provide a brief description.');
         return false;
       }
-      
+
       appointmentData.caseType = caseTypeSelect.value;
       appointmentData.description = descriptionInput.value.trim();
       return true;
     }
 
-    /**
-     * Validate Step 2: Choose Lawyer
-     */
     function validateStep2() {
       if (!appointmentData.lawyer) {
         alert('Please select a lawyer.');
@@ -807,9 +779,6 @@
       return true;
     }
 
-    /**
-     * Validate Step 3: Schedule
-     */
     function validateStep3() {
       if (!appointmentData.date || !appointmentData.time) {
         alert('Please select both a date and time.');
@@ -818,34 +787,31 @@
       return true;
     }
 
-    /**
-     * Load lawyers based on specialty
-     */
     async function loadLawyers(specialty) {
       const lawyerGrid = document.getElementById('lawyer-grid');
       lawyerGrid.innerHTML = '<div class="loading-message">Loading available lawyers...</div>';
-      
+
       try {
         const lawyersData = await fetchLawyers(specialty);
-        
+
         if (lawyersData.length === 0) {
           lawyerGrid.innerHTML = '<div class="no-lawyers-message">No lawyers available for this specialty. Please try another case type.</div>';
           return;
         }
-        
+
         lawyerGrid.innerHTML = '';
-        
+
         lawyersData.forEach(lawyer => {
           const lawyerCard = document.createElement('div');
           lawyerCard.className = 'lawyer-card';
           lawyerCard.onclick = () => selectLawyer(lawyer._id);
-          
+
           // Get initials for avatar
           const names = lawyer.fullName.split(' ');
           const initials = names.length > 1 
             ? `${names[0][0]}${names[1][0]}` 
             : names[0][0];
-          
+
           lawyerCard.innerHTML = `
             <div class="lawyer-avatar">${initials}</div>
             <div class="lawyer-info">
@@ -854,7 +820,7 @@
               <div class="lawyer-rating">★★★★★ (${Math.floor(Math.random() * 50) + 1} reviews)</div>
             </div>
           `;
-          
+
           lawyerGrid.appendChild(lawyerCard);
         });
       } catch (error) {
@@ -863,70 +829,64 @@
       }
     }
 
-    /**
-     * Handle lawyer selection
-     */
     function selectLawyer(lawyerId) {
       appointmentData.lawyer = lawyers[lawyerId];
-      
+
       // Update UI
       document.querySelectorAll('.lawyer-card').forEach(card => {
         card.classList.remove('selected');
       });
-      
+
       event.currentTarget.classList.add('selected');
       step2NextBtn.disabled = false;
     }
 
-    /**
-     * Calendar rendering functions
-     */
     function renderCalendar() {
       const monthNames = ["January", "February", "March", "April", "May", "June",
           "July", "August", "September", "October", "November", "December"];
-      
+
       document.getElementById('calendar-month').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-      
+
       // Get first day of month and total days
       const firstDay = new Date(currentYear, currentMonth, 1).getDay();
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-      
+
       // Clear calendar
       const calendarDaysGrid = document.getElementById('calendar-days');
       calendarDaysGrid.innerHTML = '';
-      
+
       // Add empty cells for days before the 1st
       for (let i = 0; i < firstDay; i++) {
           const emptyDay = document.createElement('div');
           emptyDay.className = 'calendar-day disabled';
           calendarDaysGrid.appendChild(emptyDay);
       }
-      
+
       // Get today's date
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       // Add days of the month
       for (let day = 1; day <= daysInMonth; day++) {
           const dayElement = document.createElement('div');
           dayElement.textContent = day;
           dayElement.className = 'calendar-day available';
-          
+
           const cellDate = new Date(currentYear, currentMonth, day);
           cellDate.setHours(0, 0, 0, 0);
-          
+
           if (cellDate < today) {
               dayElement.className = 'calendar-day disabled';
           } else if (cellDate.getTime() === today.getTime()) {
               dayElement.classList.add('today');
           }
-          
+
           dayElement.addEventListener('click', () => {
               if (cellDate >= today) {
                   selectDate(day, cellDate);
               }
           });
-          
+
           calendarDaysGrid.appendChild(dayElement);
       }
     }
@@ -954,19 +914,19 @@
     async function selectDate(day, date) {
       selectedDate = date;
       appointmentData.date = date.toISOString().split('T')[0];
-      
+
       // Update UI
       document.querySelectorAll('.calendar-day').forEach(dayEl => {
           dayEl.classList.remove('selected');
       });
-      
+
       const days = document.querySelectorAll('.calendar-day:not(.disabled)');
       days.forEach(dayEl => {
           if (parseInt(dayEl.textContent) === day) {
               dayEl.classList.add('selected');
           }
       });
-      
+
       // Show time slots container
       document.getElementById('time-slots-container').style.display = 'block';
       document.getElementById('selected-date-text').textContent = date.toLocaleDateString('en-US', {
@@ -975,10 +935,10 @@
           day: 'numeric',
           year: 'numeric'
       });
-      
+
       // Load available time slots
       await loadAvailableTimeSlots();
-      
+
       resetTimeSelection();
     }
 
@@ -992,64 +952,59 @@
 
     function selectTime(time) {
       appointmentData.time = time;
-      
+
       document.querySelectorAll('.time-slot').forEach(slot => {
           slot.classList.remove('selected');
       });
-      
+
       event.currentTarget.classList.add('selected');
       document.getElementById('step3-next').disabled = false;
     }
 
-    /**
-     * Update confirmation details
-     */
     function updateConfirmationDetails() {
       document.getElementById('confirm-case-type').textContent = appointmentData.caseType;
       document.getElementById('confirm-description').textContent = appointmentData.description;
       document.getElementById('confirm-lawyer').textContent = appointmentData.lawyer.name;
-      
+
       const date = new Date(appointmentData.date);
       const formattedDate = date.toLocaleDateString('en-US', {
           month: 'long',
           day: 'numeric',
           year: 'numeric'
       });
-      
+
       document.getElementById('confirm-datetime').textContent = `${formattedDate} at ${appointmentData.time}`;
     }
 
-    /**
-     * Submit appointment
-     */
     function submitAppointment() {
       const phone = document.getElementById('contact-phone').value.trim();
       if (!phone) {
           alert('Please enter your contact phone number.');
           return;
       }
-      
+
       appointmentData.phone = phone;
-      
+
       // Save to localStorage
       const appointments = JSON.parse(localStorage.getItem('lawConnectAppointments') || '[]');
       appointments.push(appointmentData);
       localStorage.setItem('lawConnectAppointments', JSON.stringify(appointments));
-      
+
       // Show success
       document.getElementById('step4').style.display = 'none';
       document.getElementById('success-message').style.display = 'block';
-      
+
       const successDate = new Date(appointmentData.date);
       const formattedDate = successDate.toLocaleDateString('en-US', {
           month: 'long',
           day: 'numeric',
           year: 'numeric'
       });
-      
+
       document.getElementById('success-details').textContent = 
           `Your consultation with ${appointmentData.lawyer.name} is confirmed for ${formattedDate} at ${appointmentData.time}.`;
     }
   </script>
 </body>
 </html>
+

@@ -22,7 +22,6 @@
       --bg-light: #f8fafc;
     }
 
-    /* Dark Theme Variables */
     [data-theme='dark'] {
       --primary-color: #1d4ed8;
       --primary-dark: #1e3a8a;
@@ -363,7 +362,7 @@
     </div>
 
     <div class="settings-grid">
-      <!-- Account Information Card -->
+
       <div class="settings-card">
         <div class="card-header">
           <div class="card-icon">
@@ -371,7 +370,7 @@
           </div>
           <h2 class="card-title">Account Information</h2>
         </div>
-        
+
         <div class="form-group">
           <label class="form-label">Account Type</label>
           <input type="text" class="form-input" id="accountType" disabled>
@@ -388,7 +387,6 @@
         </div>
       </div>
 
-      <!-- Profile Information Card -->
       <div class="settings-card">
         <div class="card-header">
           <div class="card-icon">
@@ -396,7 +394,7 @@
           </div>
           <h2 class="card-title">Profile Information</h2>
         </div>
-        
+
         <div class="form-group">
           <label class="form-label">Full Name</label>
           <input type="text" class="form-input" id="fullName" placeholder="Enter your full name">
@@ -419,7 +417,6 @@
         </div>
       </div>
 
-      <!-- Preferences Card -->
       <div class="settings-card">
         <div class="card-header">
           <div class="card-icon">
@@ -427,7 +424,7 @@
           </div>
           <h2 class="card-title">Preferences</h2>
         </div>
-        
+
         <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
           <label class="form-label">Email Notifications</label>
           <label class="toggle-switch">
@@ -459,7 +456,6 @@
         </div>
       </div>
 
-      <!-- Security Card -->
       <div class="settings-card">
         <div class="card-header">
           <div class="card-icon">
@@ -467,7 +463,7 @@
           </div>
           <h2 class="card-title">Security</h2>
         </div>
-        
+
         <div class="form-group">
           <label class="form-label">Last Login</label>
           <input type="text" class="form-input" id="lastLogin" disabled>
@@ -528,9 +524,9 @@
         // For demo purposes, we'll use a mock user ID
         // In a real application, you'd get this from authentication
         const userId = '65a1b2c3d4e5f67890123456'; // Mock user ID
-        
+
         const response = await fetch(`/api/users/${userId}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
@@ -538,11 +534,11 @@
         const userData = await response.json();
         currentUser = userData;
         populateUserData(userData);
-        
+
       } catch (error) {
         console.error('Error fetching user data:', error);
         showToast('Failed to load user data', 'error');
-        
+
         // Fallback to mock data for demo
         const mockUser = {
           _id: '65a1b2c3d4e5f67890123456',
@@ -570,11 +566,11 @@
       document.getElementById('fullName').value = userData.fullName || '';
       document.getElementById('phoneNumber').value = userData.phoneNumber || '';
       document.getElementById('profilePicture').value = userData.profilePicture || '';
-      
+
       // Format dates
       const lastLogin = userData.lastLogin ? new Date(userData.lastLogin).toLocaleString() : 'Never';
       const createdAt = userData.createdAt ? new Date(userData.createdAt).toLocaleDateString() : 'Unknown';
-      
+
       document.getElementById('lastLogin').value = lastLogin;
       document.getElementById('createdAt').value = createdAt;
     }
@@ -583,7 +579,7 @@
     async function saveProfile() {
       const saveBtn = document.getElementById('saveProfileBtn');
       const originalText = saveBtn.innerHTML;
-      
+
       try {
         saveBtn.innerHTML = '<span class="loading"></span> Saving...';
         saveBtn.disabled = true;
@@ -608,9 +604,9 @@
 
         const updatedUser = await response.json();
         currentUser = updatedUser;
-        
+
         showToast('Profile updated successfully!');
-        
+
       } catch (error) {
         console.error('Error updating profile:', error);
         showToast('Failed to update profile', 'error');
@@ -664,13 +660,13 @@
     // Load user data when page loads
     document.addEventListener('DOMContentLoaded', function() {
       fetchUserData();
-      
+
       // Load saved preferences
       const darkMode = localStorage.getItem('darkMode') === 'true';
       document.getElementById('darkMode').checked = darkMode;
       document.getElementById('emailNotifications').checked = localStorage.getItem('emailNotifications') !== 'false';
       document.getElementById('pushNotifications').checked = localStorage.getItem('pushNotifications') !== 'false';
-      
+
       // Apply dark mode if enabled
       if (darkMode) {
         savePreferences();
@@ -679,3 +675,4 @@
   </script>
 </body>
 </html>
+

@@ -8,16 +8,16 @@
   <meta name="author" content="LawConnect Team">
   <title>Messages | LawConnect</title>
   <link rel="stylesheet" href="Message.css">
-  <!-- Google Fonts for better typography -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Favicon -->
+
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 </head>
 <body>
   <main class="message-app-container">
-    <!-- Sidebar -->
+
     <aside class="message-sidebar" aria-label="Conversations">
       <div class="sidebar-header">
         <h2>Messages</h2>
@@ -30,9 +30,9 @@
           <input type="text" id="conversation-search" placeholder="Search conversations..." aria-label="Search conversations">
         </div>
       </div>
-      
+
       <div class="conversation-list" id="conversation-list" role="list" aria-live="polite">
-        <!-- Conversations will be dynamically inserted here -->
+
         <div class="empty-chat-state">
           <div class="empty-icon" aria-hidden="true">💬</div>
           <h3>No conversations</h3>
@@ -40,15 +40,14 @@
         </div>
       </div>
     </aside>
-    
-    <!-- Main Chat Area -->
+
     <section class="chat-area">
       <div id="empty-chat-state" class="empty-chat-state" role="status">
         <div class="empty-icon" aria-hidden="true">📱</div>
         <h3>Welcome to Messages</h3>
         <p>Select a conversation from the sidebar to start messaging.</p>
       </div>
-      
+
       <div id="active-chat-view" style="display: none;">
         <header class="chat-header">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -58,11 +57,11 @@
           <h3 class="chat-title" id="chat-title"></h3>
           <span class="case-badge" id="case-badge"></span>
         </header>
-        
+
         <div class="messages-container" id="messages-container" role="log" aria-live="polite">
-          <!-- Messages will be dynamically inserted here -->
+
         </div>
-        
+
         <div class="message-input-area">
           <label for="message-text" class="sr-only">Type your message</label>
           <textarea id="message-text" placeholder="Type your message..." rows="1" aria-label="Message input field"></textarea>
@@ -80,3 +79,4 @@
   <script src="Message.js"></script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-// Firebase configuration (ensure this matches your project)
+
 const firebaseConfig = {
   apiKey: "AIzaSyAlyIP81ut-Stj6Uyf123SOTNThfnNxYOs",
   authDomain: "lawconnect-swe2547.firebaseapp.com",
@@ -9,14 +9,12 @@ const firebaseConfig = {
   measurementId: "G-XYJC8JJ5NE" // Optional, if you use Analytics
 };
 
-// Initialize Firebase (only if not already initialized)
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// DOM Elements
 const signupForm = document.getElementById('signupForm');
 const lawyerRadio = document.querySelector('input[value="lawyer"]');
 const clientRadio = document.querySelector('input[value="client"]');
@@ -31,16 +29,12 @@ const termsCheckbox = document.getElementById('terms');
 const signupBtn = document.querySelector('.signup-btn');
 const passwordError = document.getElementById('password-error');
 const confirmPasswordError = document.getElementById('confirm-password-error');
-const profilePictureInput = document.getElementById('profilePicture'); // New profile picture input
 
-/**
- * Toggles the visibility and required status of lawyer/client specific fields.
- */
 function toggleAccountTypeFields() {
   console.log("Toggling account type fields"); // Debug log
   console.log("Lawyer radio checked:", lawyerRadio.checked);
   console.log("Client radio checked:", clientRadio.checked);
-  
+
   if (lawyerRadio.checked) {
     console.log("Showing lawyer fields, hiding client fields");
     lawyerFields.style.display = 'block';
@@ -63,16 +57,11 @@ function toggleAccountTypeFields() {
     specializationSelect.required = false;
     clientCaseTypeSelect.required = false;
   }
-  
+
   console.log("Lawyer fields display:", lawyerFields.style.display);
   console.log("Client fields display:", clientFields.style.display);
 }
 
-/**
- * Validates the password strength.
- * @param {string} password The password to validate.
- * @returns {string|null} An error message if invalid, otherwise null.
- */
 function validatePassword(password) {
   if (password.length < 6) {
     return 'Password must be at least 6 characters long.';
@@ -83,9 +72,6 @@ function validatePassword(password) {
   return null;
 }
 
-/**
- * Handles real-time password and confirm password validation feedback.
- */
 function handlePasswordValidation() {
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
@@ -108,10 +94,6 @@ function handlePasswordValidation() {
   }
 }
 
-/**
- * Handles the signup form submission.
- * @param {Event} e The submit event.
- */
 signupForm.addEventListener('submit', async function(e) {
   e.preventDefault();
 
@@ -129,7 +111,6 @@ signupForm.addEventListener('submit', async function(e) {
 
   const email = document.getElementById('email').value.trim();
   const password = passwordInput.value;
-  const profilePicture = profilePictureInput.files[0]; // Get profile picture input
 
   // Set loading state for the button
   signupBtn.textContent = 'CREATING ACCOUNT...';
@@ -150,7 +131,6 @@ signupForm.addEventListener('submit', async function(e) {
       email: email,
       phone: formData.get('phone').trim(),
       accountType: accountType,
-      profilePicture: profilePicture ? profilePicture.name : '', // Include profile picture in user data
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -207,11 +187,10 @@ clientRadio.addEventListener('change', function() {
   toggleAccountTypeFields();
 });
 
-// Event Listeners for real-time password validation
 passwordInput.addEventListener('input', handlePasswordValidation);
 confirmPasswordInput.addEventListener('input', handlePasswordValidation);
 
-// Initial call to set up fields based on default radio selection (if any)
 document.addEventListener('DOMContentLoaded', () => {
   toggleAccountTypeFields();
 });
+

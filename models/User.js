@@ -52,10 +52,8 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for better query performance
 userSchema.index({ accountType: 1 });
 
-// Virtual for lawyer-specific data
 userSchema.virtual('lawyerProfile', {
   ref: 'LawyerProfile',
   localField: '_id',
@@ -63,7 +61,6 @@ userSchema.virtual('lawyerProfile', {
   justOne: true
 });
 
-// Virtual for client-specific data
 userSchema.virtual('clientProfile', {
   ref: 'ClientProfile',
   localField: '_id',
@@ -71,7 +68,6 @@ userSchema.virtual('clientProfile', {
   justOne: true
 });
 
-// Method to get user display name
 userSchema.methods.getDisplayName = function() {
   return this.fullName.split(' ')[0];
 };
@@ -82,3 +78,4 @@ userSchema.methods.deactivate = function() {
 };
 
 module.exports = mongoose.model('User', userSchema);
+

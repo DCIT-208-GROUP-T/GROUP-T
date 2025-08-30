@@ -1,21 +1,20 @@
-/* Root CSS Variables */
+
 :root {
-  --primary-bg: #002E6D; /* Dark blue background */
-  --signup-box-bg: rgba(0, 0, 0, 0.1); /* Semi-transparent black for signup box */
-  --text-color-light: white; /* White text */
+  --primary-bg: #002E6D; 
+  --signup-box-bg: rgba(0, 0, 0, 0.1); 
+  --text-color-light: white; 
   --input-padding: 0.6rem;
   --input-border-radius: 6px;
   --input-margin-bottom: 1.2rem;
-  --button-bg: #1A00FF; /* Blue button */
-  --button-hover-bg: #1500cc; /* Darker blue on hover */
+  --button-bg: #1A00FF; 
+  --button-hover-bg: #1500cc; 
   --font-family-main: 'Arial', sans-serif;
   --font-family-comic: 'Comic Sans MS', cursive, sans-serif;
   --radio-option-bg: rgba(255, 255, 255, 0.1);
   --radio-option-hover-bg: rgba(255, 255, 255, 0.2);
-  --error-border-color: #ff4444; /* Red for validation errors */
+  --error-border-color: #ff4444; 
 }
 
-/* Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -29,18 +28,16 @@ body, html {
   line-height: 1.6;
 }
 
-/* Full-screen Container */
 .signup-container {
   background-color: var(--primary-bg);
   width: 100%;
-  min-height: 100vh; /* Use min-height for flexibility */
+  min-height: 100vh; 
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* Add some padding for smaller screens */
+  padding: 20px; 
 }
 
-/* Signup Box */
 .signup-box {
   background: var(--signup-box-bg);
   padding: 2rem;
@@ -49,12 +46,11 @@ body, html {
   max-width: 400px;
   color: var(--text-color-light);
   text-align: center;
-  max-height: 95vh; /* Allow box to take more height on larger forms */
-  overflow-y: auto; /* Enable scrolling for long forms */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  max-height: 95vh; 
+  overflow-y: auto; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 
-/* Welcome Header */
 .welcome-text {
   font-size: 2rem;
   margin-bottom: 1rem;
@@ -62,7 +58,6 @@ body, html {
   font-weight: bold;
 }
 
-/* Gavel Icon */
 .gavel-icon {
   width: 60px;
   height: auto;
@@ -72,7 +67,6 @@ body, html {
   margin-right: auto;
 }
 
-/* Form Styling */
 .signup-form {
   display: flex;
   flex-direction: column;
@@ -117,7 +111,6 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(26, 0, 255, 0.5);
 }
 
-/* Account Type Selection */
 .account-type-section {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -133,7 +126,7 @@ select:focus {
 .radio-group {
   display: flex;
   justify-content: space-around;
-  gap: 10px; /* Space between radio options */
+  gap: 10px; 
   margin-bottom: 1rem;
 }
 
@@ -145,8 +138,8 @@ select:focus {
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.3s ease;
-  flex: 1; /* Distribute space evenly */
-  justify-content: center; /* Center content within option */
+  flex: 1; 
+  justify-content: center; 
 }
 
 .radio-option:hover {
@@ -155,11 +148,10 @@ select:focus {
 
 .radio-option input[type="radio"] {
   margin-right: 0.5rem;
-  width: auto; /* Override full width */
-  margin-bottom: 0; /* Remove bottom margin */
+  width: auto; 
+  margin-bottom: 0; 
 }
 
-/* Terms Checkbox */
 .terms-section {
   display: flex;
   align-items: center;
@@ -180,7 +172,6 @@ select:focus {
   cursor: pointer;
 }
 
-/* Signup Button */
 .signup-btn {
   background-color: var(--button-bg);
   color: var(--text-color-light);
@@ -206,7 +197,6 @@ select:focus {
   opacity: 0.7;
 }
 
-/* Login Link */
 .login-link {
   margin-top: 1.5rem;
   font-size: 0.9rem;
@@ -220,10 +210,9 @@ select:focus {
 }
 
 .login-link a:hover {
-  color: #a0d0ff; /* Lighter blue on hover */
+  color: #a0d0ff; 
 }
 
-/* Brand Name */
 .brand-name {
   margin-top: 2rem;
   font-family: var(--font-family-comic);
@@ -232,7 +221,6 @@ select:focus {
   color: rgba(255, 255, 255, 0.8);
 }
 
-/* Validation Feedback */
 input.invalid, select.invalid {
   border: 2px solid var(--error-border-color);
   box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.3);
@@ -246,11 +234,10 @@ input.invalid, select.invalid {
   margin-bottom: 10px;
 }
 
-/* Responsive Design */
 @media (max-width: 500px) {
   .signup-box {
     padding: 1.5rem;
-    max-height: 90vh; /* Adjust max height for smaller screens */
+    max-height: 90vh; 
   }
 
   .gavel-icon {
@@ -268,7 +255,7 @@ input.invalid, select.invalid {
 
   .radio-group {
     flex-direction: column;
-    gap: 0.8rem; /* Adjust gap for stacked radios */
+    gap: 0.8rem; 
   }
 
   .radio-option {
@@ -279,3 +266,4 @@ input.invalid, select.invalid {
     font-size: 1rem;
   }
 }
+

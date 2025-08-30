@@ -1,6 +1,4 @@
-// Mock Data for Lawyer Dashboard
 
-// Mock Lawyer Appointments
 const mockLawyerAppointments = [
     {
         id: 1,
@@ -20,7 +18,6 @@ const mockLawyerAppointments = [
     }
 ];
 
-// Mock Lawyer Cases
 const mockLawyerCases = [
     {
         id: 1,
@@ -36,7 +33,6 @@ const mockLawyerCases = [
     }
 ];
 
-// Mock Messages
 const mockMessages = [
     {
         id: 1,
@@ -54,7 +50,6 @@ const mockMessages = [
     }
 ];
 
-// Mock Invoices
 const mockInvoices = [
     {
         id: 1,
@@ -70,7 +65,6 @@ const mockInvoices = [
     }
 ];
 
-// Exporting mock data for use in other files
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         mockLawyerAppointments,
@@ -79,3 +73,4 @@ if (typeof module !== 'undefined' && module.exports) {
         mockInvoices
     };
 }
+

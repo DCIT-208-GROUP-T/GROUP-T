@@ -6,7 +6,7 @@ const connectDB = async () => {
     const conn = await mongoose.connect(config.MONGODB_URI);
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
-    
+
     // Handle connection events
     mongoose.connection.on('error', (err) => {
       console.error('MongoDB connection error:', err);
@@ -27,7 +27,6 @@ const connectDB = async () => {
   }
 };
 
-// Graceful shutdown
 process.on('SIGINT', async () => {
   try {
     await mongoose.connection.close();
@@ -40,3 +39,4 @@ process.on('SIGINT', async () => {
 });
 
 module.exports = connectDB;
+

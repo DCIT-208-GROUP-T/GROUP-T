@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken'); // Assuming JWT is used for authentication
 
-// Middleware to authenticate user
 const authenticate = async (req, res, next) => {
     try {
         const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
@@ -23,14 +22,13 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-// Middleware to check if user has required role
 const requireRole = (roles) => {
     return async (req, res, next) => {
         try {
             // Get user ID from request (this would typically come from authentication middleware)
             // For now, we'll assume user ID is passed in headers or params
             const userId = req.headers['x-user-id'] || req.params.userId;
-            
+
             if (!userId) {
                 return res.status(401).json({ message: 'User ID required' });
             }
@@ -59,3 +57,4 @@ const requireRole = (roles) => {
 };
 
 module.exports = { authenticate, requireRole };
+

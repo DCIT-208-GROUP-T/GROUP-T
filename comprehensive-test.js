@@ -2,7 +2,6 @@ const axios = require('axios');
 
 const BASE_URL = 'http://localhost:3000/api';
 
-// Mock user data for testing
 const testUsers = {
   client: {
     _id: 'test-client-id', // This would need to be replaced with actual IDs from your database
@@ -38,7 +37,7 @@ async function testUserEndpoints() {
 
     if (usersResponse.data.length > 0) {
       const testUserId = usersResponse.data[0]._id;
-      
+
       // Test 2: Get user by ID
       console.log('2. Testing GET /users/:id');
       const userByIdResponse = await axios.get(`${BASE_URL}/users/${testUserId}`);
@@ -51,7 +50,7 @@ async function testUserEndpoints() {
         phoneNumber: '+1234567890',
         profilePicture: 'https://example.com/profile.jpg'
       };
-      
+
       const profileUpdateResponse = await axios.put(
         `${BASE_URL}/users/profile/${testUserId}`,
         updateData
@@ -89,7 +88,7 @@ async function testCaseEndpoints() {
 
     if (casesResponse.data.length > 0) {
       const testCaseId = casesResponse.data[0]._id;
-      
+
       // Test 2: Get case by ID
       console.log('2. Testing GET /cases/:id');
       const caseByIdResponse = await axios.get(`${BASE_URL}/cases/${testCaseId}`);
@@ -151,3 +150,4 @@ async function runAllTests() {
 }
 
 runAllTests().catch(console.error);
+

@@ -1,4 +1,4 @@
-/* Enhanced Lawyer Dashboard CSS */
+
 :root {
   --primary-bg: #002f5c;
   --secondary-bg: #0a3c78;
@@ -16,7 +16,6 @@
   --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Base Styles */
 body {
   margin: 0;
   background: var(--primary-bg);
@@ -25,7 +24,6 @@ body {
   color: var(--text-color-dark);
 }
 
-/* Main Container */
 .lawyer-dashboard-main-container {
   background: var(--secondary-bg);
   border-radius: 20px;
@@ -39,7 +37,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Top Bar */
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -74,7 +71,6 @@ body {
   gap: 15px;
 }
 
-/* Quick Action Button */
 .quick-action-btn {
   background: var(--accent-color);
   color: white;
@@ -100,7 +96,6 @@ body {
   fill: white;
 }
 
-/* Icon Buttons */
 .icon-button {
   background: rgba(255, 255, 255, 0.1);
   border: none;
@@ -138,7 +133,6 @@ body {
   font-weight: 600;
 }
 
-/* Search Container */
 .search-container {
   display: flex;
   align-items: center;
@@ -168,7 +162,6 @@ body {
   margin-left: 10px;
 }
 
-/* Enhanced Stats Grid */
 .stats-grid-enhanced {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -233,7 +226,6 @@ body {
   color: var(--error-color);
 }
 
-/* Dashboard Grid */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -247,7 +239,6 @@ body {
   gap: 20px;
 }
 
-/* Dashboard Cards */
 .dashboard-card {
   background: var(--card-bg);
   border-radius: 12px;
@@ -287,7 +278,6 @@ body {
   color: white;
 }
 
-/* Agenda List */
 .agenda-list {
   display: flex;
   flex-direction: column;
@@ -321,7 +311,6 @@ body {
   opacity: 0.7;
 }
 
-/* Cases List */
 .cases-list {
   display: flex;
   flex-direction: column;
@@ -384,13 +373,11 @@ body {
   background: var(--accent-color);
 }
 
-/* Chart Container */
 .chart-container {
   height: 200px;
   margin-top: 20px;
 }
 
-/* Quick Actions Grid */
 .quick-actions-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -431,7 +418,6 @@ body {
   font-weight: 500;
 }
 
-/* Deadlines List */
 .deadlines-list {
   display: flex;
   flex-direction: column;
@@ -475,7 +461,6 @@ body {
   color: var(--text-color-dark);
 }
 
-/* Footer Navigation */
 .footer-styling {
   background: var(--footer-nav-bg);
   width: 100%;
@@ -542,13 +527,12 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .dashboard-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .stats-grid-enhanced {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -561,31 +545,31 @@ body {
     margin: 0;
     width: 100%;
   }
-  
+
   .top-bar {
     flex-direction: column;
     gap: 15px;
     align-items: flex-start;
   }
-  
+
   .top-bar-right {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .stats-grid-enhanced {
     grid-template-columns: 1fr;
   }
-  
+
   .quick-actions-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .footer-styling {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
-  
+
   .nav-item span {
     display: none;
   }
@@ -595,19 +579,19 @@ body {
   .dashboard-title {
     font-size: 1.4rem;
   }
-  
+
   .stat-card {
     flex-direction: column;
     text-align: center;
     gap: 10px;
   }
-  
+
   .case-item {
     flex-direction: column;
     gap: 10px;
     text-align: center;
   }
-  
+
   .deadline-item {
     flex-direction: column;
     gap: 8px;

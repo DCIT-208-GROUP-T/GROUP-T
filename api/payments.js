@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Invoice = require('../models/Invoice');
 
-// Verify payment and update invoice status
 router.post('/verify', async (req, res) => {
     try {
         const { reference, invoiceNumber, amount, status } = req.body;
@@ -70,7 +69,6 @@ router.post('/verify', async (req, res) => {
     }
 });
 
-// Get invoice by number
 router.get('/invoice/:invoiceNumber', async (req, res) => {
     try {
         const { invoiceNumber } = req.params;
@@ -97,7 +95,6 @@ router.get('/invoice/:invoiceNumber', async (req, res) => {
     }
 });
 
-// Get all invoices (for testing and admin purposes)
 router.get('/invoices', async (req, res) => {
     try {
         const invoices = await Invoice.find().sort({ createdAt: -1 });
@@ -114,7 +111,6 @@ router.get('/invoices', async (req, res) => {
     }
 });
 
-// Create a test invoice (for development/testing)
 router.post('/test-invoice', async (req, res) => {
     try {
         const { invoiceNumber, client, amount, dueDate } = req.body;
@@ -145,3 +141,4 @@ router.post('/test-invoice', async (req, res) => {
 });
 
 module.exports = router;
+

@@ -97,7 +97,6 @@
   <div class="booking-container">
     <h1>Book an Appointment</h1>
 
-    <!-- Step Indicators -->
     <div class="step-indicators">
       <div id="indicator-1" class="active">1. Choose Lawyer</div>
       <div id="indicator-2">2. Date & Time</div>
@@ -105,7 +104,6 @@
       <div id="indicator-4">4. Confirm</div>
     </div>
 
-    <!-- Step 1 -->
     <div id="step-1" class="step active">
       <h2>Select a Lawyer</h2>
       <div class="lawyer-list">
@@ -123,7 +121,6 @@
       </div>
     </div>
 
-    <!-- Step 2 -->
     <div id="step-2" class="step">
       <h2>Select Date & Time</h2>
       <input type="date" id="appointmentDate" />
@@ -134,7 +131,6 @@
       </div>
     </div>
 
-    <!-- Step 3 -->
     <div id="step-3" class="step">
       <h2>Case Details</h2>
       <textarea id="caseDetails" rows="5" placeholder="Describe your case..."></textarea>
@@ -144,11 +140,10 @@
       </div>
     </div>
 
-    <!-- Step 4 -->
     <div id="step-4" class="step">
       <h2>Appointment Summary</h2>
       <div class="summary-card" id="appointmentSummary">
-        <!-- Populated by JS -->
+
       </div>
       <div class="nav-buttons">
         <button onclick="goToStep(3)">Back</button>
@@ -250,3 +245,4 @@
   </script>
 </body>
 </html>
+
