@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage legal documents on LawConnect">
+  <title>Documents | LawConnect</title>
+  <link rel="stylesheet" href="CaseManagementDashboard.css">
+  <style>
+    .documents-container {
+      padding: 20px;
+    }
+    .doc-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .upload-btn {
+      background: #1A00FF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    .upload-btn svg {
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
+    }
+    .search-filter {
+      display: flex;
+      align-items: center;
+    }
+    .search-filter input {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      margin-left: 10px;
+    }
+    .documents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .doc-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      cursor: pointer;
+    }
+    .doc-card:hover {
+      transform: translateY(-3px);
+    }
+    .doc-icon {
+      font-size: 2rem;
+      color: #3182ce;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .doc-name {
+      font-weight: 500;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .doc-meta {
+      font-size: 0.8rem;
+      color: #718096;
+    }
+    .doc-options {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .doc-options button {
+      background: none;
+      border: none;
+      color: #3182ce;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-header">
+      <h1>Documents</h1>
+      <div class="search-bar">
+        <input type="text" placeholder="Search documents...">
+        <button class="action-btn">Search</button>
+      </div>
+    </div>
+    
+    <div class="documents-container">
+      <div class="doc-actions">
+        <button class="upload-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+          </svg>
+          Upload
+        </button>
+        <div class="search-filter">
+          <span>Filter by:</span>
+          <select>
+            <option>All Documents</option>
+            <option>Contracts</option>
+            <option>Court Filings</option>
+            <option>Case Evidence</option>
+            <option>Personal</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="documents-grid">
+        <div class="doc-card">
+          <div class="doc-icon">📄</div>
+          <div class="doc-name">Merger Agreement Draft v5.pdf</div>
+          <div class="doc-meta">Added July 12, 2024</div>
+          <div class="doc-meta">2.4 MB</div>
+          <div class="doc-options">
+            <button>Share</button>
+            <button>Download</button>
+          </div>
+        </div>
+        
+        <div class="doc-card">
+          <div class="doc-icon">📝</div>
+          <div class="doc-name">Deposition Notes - Smith Case.docx</div>
+          <div class="doc-meta">Added July 8, 2024</div>
+          <div class="doc-meta">1.1 MB</div>
+          <div class="doc-options">
+            <button>Share</button>
+            <button>Download</button>
+          </div>
+        </div>
+        
+        <div class="doc-card">
+          <div class="doc-icon">🖼️</div>
+          <div class="doc-name">Property Photos - Johnson Deal</div>
+          <div class="doc-meta">Added June 30, 2024</div>
+          <div class="doc-meta">5.6 MB</div>
+          <div class="doc-options">
+            <button>Share</button>
+            <button>Download</button>
+          </div>
+        </div>
+        
+        <div class="doc-card">
+          <div class="doc-icon">📄</div>
+          <div class="doc-name">Court Order - Case #2345678.pdf</div>
+          <div class="doc-meta">Added June 22, 2024</div>
+          <div class="doc-meta">3.2 MB</div>
+          <div class="doc-options">
+            <button>Share</button>
+            <button>Download</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-styling">
+    <nav class="bottom-nav">
+      <a href="LawyerDashboard.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </a>
+      <a href="Message.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </a>
+      <a href="documents.html" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+          <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/>
+        </svg>
+      </a>
+    </nav>
+  </footer>
+</body>
+</html>

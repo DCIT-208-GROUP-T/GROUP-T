@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lawyer profile on LawConnect">
+  <meta name="keywords" content="LawConnect, lawyer, profile, legal expert">
+  <title>Lawyer Profile | LawConnect</title>
+  <link rel="stylesheet" href="LawyerDashboard.css">
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary-color: #64748b;
+      --accent-color: #f1f5f9;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --border-color: #e2e8f0;
+      --card-bg: #ffffff;
+      --bg-light: #f8fafc;
+    }
+
+    /* Dark Theme Variables */
+    [data-theme='dark'] {
+      --primary-color: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --secondary-color: #a1a1a1;
+      --accent-color: #1e293b;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-dark: #f1f5f9;
+      --text-light: #e2e8f0;
+      --border-color: #475569;
+      --card-bg: #334155;
+      --bg-light: #1e293b;
+    }
+
+    .profile-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #e3e1fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #3182ce;
+      margin-right: 20px;
+      font-weight: bold;
+    }
+    .profile-info h2 {
+      color: #002f5c;
+      margin: 0 0 5px 0;
+    }
+    .profile-specialty {
+      color: #718096;
+      margin-bottom: 10px;
+    }
+    .rating {
+      color: #ecc94b;
+    }
+    .profile-section {
+      margin-bottom: 25px;
+    }
+    .profile-section h3 {
+      color: #002f5c;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    .experience-item {
+      margin-bottom: 15px;
+    }
+    .experience-date {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+    .editable-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .edit-btn {
+      background: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="lawyer-dashboard-main-container">
+    <header class="top-bar">
+      <a href="LawyerDashboard.html">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="28" height="28">
+          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+        </svg>
+      </a>
+    </header>
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">JD</div>
+        <div class="profile-info">
+          <h2>John Doe, Esq.</h2>
+          <div class="profile-specialty">Corporate Law Specialist</div>
+          <div class="rating">★★★★★ (42 reviews)</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Biography</h3>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <p>As a seasoned corporate attorney with over 12 years of experience, I specialize in mergers and acquisitions, corporate governance, and contract negotiations. I've successfully represented clients ranging from startups to Fortune 500 companies.</p>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Education</h3>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <div class="experience-item">
+          <div><strong>Juris Doctor</strong>, Harvard Law School</div>
+          <div class="experience-date">2005 - 2008</div>
+        </div>
+        <div class="experience-item">
+          <div><strong>Bachelor of Arts in Political Science</strong>, Yale University</div>
+          <div class="experience-date">2001 - 2005</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Experience</h3>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <div class="experience-item">
+          <div><strong>Senior Partner</strong>, Smith & Associates LLP</div>
+          <div class="experience-date">2015 - Present</div>
+          <p>Leading corporate practice with focus on technology sector</p>
+        </div>
+        <div class="experience-item">
+          <div><strong>Associate Attorney</strong>, Morgan & Morgan</div>
+          <div class="experience-date">2008 - 2015</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Areas of Practice</h3>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <span style="background: #ebf5ff; color: #3182ce; padding: 5px 10px; border-radius: 20px;">Mergers & Acquisitions</span>
+          <span style="background: #ebf5ff; color: #3182ce; padding: 5px 10px; border-radius: 20px;">Corporate Governance</span>
+          <span style="background: #ebf5ff; color: #3182ce; padding: 5px 10px; border-radius: 20px;">Contract Law</span>
+          <span style="background: #ebf5ff; color: #3182ce; padding: 5px 10px; border-radius: 20px;">Securities Regulation</span>
+          <span style="background: #ebf5ff; color: #3182ce; padding: 5px 10px; border-radius: 20px;">Intellectual Property</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <h3>Availability</h3>
+      <p>Next available appointment: July 25, 2024</p>
+      <button style="width: 100%; padding: 12px; background: #1A00FF; color: white; border: none; border-radius: 6px; margin-top: 15px; cursor: pointer;">
+        Book Consultation
+      </button>
+    </div>
+  </div>
+
+  <footer class="footer-styling">
+    <nav class="bottom-nav">
+      <a href="LawyerDashboard.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="24" height="24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </a>
+      <a href="Message.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="24" height="24">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </a>
+      <a href="lawyer-profile.html" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c" width="24" height="24">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+        </svg>
+      </a>
+    </nav>
+  </footer>
+</body>
+</html>

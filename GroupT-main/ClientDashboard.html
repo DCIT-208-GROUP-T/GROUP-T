@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LawConnect Client Dashboard: Comprehensive overview of your legal cases, appointments, documents, and communications">
+  <meta name="keywords" content="LawConnect, client dashboard, legal cases, appointments, documents, messages">
+  <meta name="author" content="LawConnect Team">
+  <title>Client Dashboard | LawConnect</title>
+  <link rel="stylesheet" href="ClientDashboard.css" />
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <main class="client-dashboard-main-container">
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <h1 class="dashboard-title">Client Dashboard</h1>
+        <span class="client-name" id="clientName">Loading...</span>
+      </div>
+      <div class="top-bar-right">
+        <button class="icon-button" onclick="window.location.href='settings.html'" title="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.64l-1.92-3.32c-.12-.22-.37-.3-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.22-.08.47.12.64l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.64l1.92 3.32c.12.22.37.3.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.64l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+          </svg>
+        </button>
+        <button class="icon-button" onclick="window.location.href='notifications.html'" title="Notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+            <path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 0 0-3 0v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+          </svg>
+          <span class="notification-badge" id="notificationBadge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Overview Stats Cards -->
+    <section class="stats-grid-enhanced">
+      <!-- Active Cases Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M20 6H4v12h16V6zm0-2a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="activeCasesCount">0</h3>
+          <p>Active Cases</p>
+          <span class="stat-trend positive">+1 this month</span>
+        </div>
+      </div>
+
+      <!-- Appointments Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="upcomingAppointmentsCount">0</h3>
+          <p>Upcoming Appointments</p>
+          <span class="stat-trend">View Calendar</span>
+        </div>
+      </div>
+
+      <!-- Documents Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="documentsCount">0</h3>
+          <p>Documents</p>
+          <span class="stat-trend positive">+3 this week</span>
+        </div>
+      </div>
+
+      <!-- Messages Card -->
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <h3 id="newMessagesCount">0</h3>
+          <p>New Messages</p>
+          <span class="stat-trend negative">Urgent: 2</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-grid">
+      <!-- Left Column -->
+      <div class="dashboard-column">
+        <!-- Upcoming Appointments -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Upcoming Appointments</h3>
+            <button class="view-all-btn" onclick="window.location.href='Bookappointment.html'">View All</button>
+          </div>
+          <div class="agenda-list" id="upcomingClientAppointments">
+            <div class="agenda-item no-data">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 11H12V7h1v6h3v1h-3.5z"/>
+              </svg>
+              <span>No appointments scheduled</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Your Cases -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Your Cases</h3>
+            <button class="view-all-btn" onclick="window.location.href='CaseManagementDashboard.html'">View All</button>
+          </div>
+          <div class="cases-list" id="clientCases">
+            <div class="case-item">
+              <div class="case-info">
+                <h4>Employment Dispute Resolution</h4>
+                <span class="case-status status-active">Active</span>
+                <p>Lawyer: Sarah Johnson • Last updated: 2 days ago</p>
+              </div>
+              <button class="case-action" onclick="viewCase(1)">View</button>
+            </div>
+            <div class="case-item">
+              <div class="case-info">
+                <h4>Contract Review</h4>
+                <span class="case-status status-pending">Pending</span>
+                <p>Lawyer: Michael Chen • Last updated: 1 week ago</p>
+              </div>
+              <button class="case-action" onclick="viewCase(2)">View</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column -->
+      <div class="dashboard-column">
+        <!-- Quick Actions -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="quick-actions-grid">
+            <button class="quick-action" onclick="window.location.href='BookConsultation.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11z"/>
+              </svg>
+              <span>Book Consultation</span>
+            </button>
+            <button class="quick-action" onclick="window.location.href='UploadDocuments.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+              </svg>
+              <span>Upload Documents</span>
+            </button>
+            <button class="quick-action" onclick="window.location.href='PayInvoice.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+              </svg>
+              <span>Pay Invoice</span>
+            </button>
+            <button class="quick-action" onclick="window.location.href='ContactLawyer.html'">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v16l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+              </svg>
+              <span>Contact Lawyer</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Recent Documents -->
+        <section class="dashboard-card">
+          <div class="card-header">
+            <h3>Recent Documents</h3>
+            <button class="view-all-btn" onclick="window.location.href='documents.html'">View All</button>
+          </div>
+          <div class="agenda-list">
+            <div class="agenda-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+              </svg>
+              <span>Employment Agreement Review.pdf</span>
+            </div>
+            <div class="agenda-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+              </svg>
+              <span>Contract Draft.docx</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Client Support Section -->
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h3>Need Help?</h3>
+      </div>
+      <div class="quick-actions-grid">
+        <button class="quick-action" onclick="window.location.href='Message.html'">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v16l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+          </svg>
+          <span>Message Support</span>
+        </button>
+        <button class="quick-action" onclick="window.location.href='client-profile.html'">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+          </svg>
+          <span>Update Profile</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <footer class="footer-styling" role="navigation" aria-label="Main navigation">
+    <nav class="bottom-nav">
+      <button type="button" class="nav-item active" aria-label="Dashboard">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        <span>Dashboard</span>
+      </button>
+      <button type="button" class="nav-item" aria-label="Messages" onclick="window.location.href='Message.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v16l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <span>Messages</span>
+      </button>
+      <button type="button" class="nav-item" aria-label="Profile" onclick="window.location.href='client-profile.html'">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+        </svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- Enhanced JavaScript -->
+  <script src="ClientDashboard.js"></script>
+</body>
+</html>

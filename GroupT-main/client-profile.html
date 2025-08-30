@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Client profile on LawConnect">
+  <title>Client Profile | LawConnect</title>
+  <link rel="stylesheet" href="ClientDashboard.css">
+  <style>
+    .profile-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin: 20px 0;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #e3e1fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: #3182ce;
+      margin-right: 20px;
+      font-weight: bold;
+    }
+    .profile-info h2 {
+      color: #002f5c;
+      margin: 0 0 5px 0;
+    }
+    .profile-section {
+      margin-bottom: 25px;
+    }
+    .profile-section h3 {
+      color: #002f5c;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    .editable-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .edit-btn {
+      background: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <header class="top-bar">
+      <a href="ClientDashboard.html">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff" width="28" height="28">
+          <path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>
+        </svg>
+      </a>
+    </header>
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">JD</div>
+        <div class="profile-info">
+          <h2>Jane Doe</h2>
+          <div class="profile-specialty">Client</div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Contact Information</h3>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <p>Email: janedoe@example.com</p>
+        <p>Phone: +1 (555) 123-4567</p>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Legal Interests</h3>
+          <button class="edit-btn">Edit</button>
+        </div>
+        <p>Primary Legal Interest: Family Law</p>
+      </div>
+
+      <div class="profile-section">
+        <div class="editable-field">
+          <h3>Active Cases</h3>
+          <button class="edit-btn">View</button>
+        </div>
+        <p>Case #12345: Divorce Proceedings</p>
+        <p>Case #67890: Child Custody</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-styling">
+    <nav class="bottom-nav">
+      <a href="ClientDashboard.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+      </a>
+      <a href="Message.html" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#fff">
+          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+        </svg>
+      </a>
+      <a href="client-profile.html" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
+          <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z"/>
+        </svg>
+      </a>
+    </nav>
+  </footer>
+</body>
+</html>

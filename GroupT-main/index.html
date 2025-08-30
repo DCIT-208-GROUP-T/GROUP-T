@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta tag -->
+    <title>Your Web App</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <link rel="stylesheet" href="index.css" />
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary-color: #64748b;
+      --accent-color: #f1f5f9;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --border-color: #e2e8f0;
+      --card-bg: #ffffff;
+      --bg-light: #f8fafc;
+    }
+
+    /* Dark Theme Variables */
+    [data-theme='dark'] {
+      --primary-color: #1d4ed8;
+      --primary-dark: #1e3a8a;
+      --secondary-color: #a1a1a1;
+      --accent-color: #1e293b;
+      --success-color: #10b981;
+      --error-color: #ef4444;
+      --warning-color: #f59e0b;
+      --text-dark: #f1f5f9;
+      --text-light: #e2e8f0;
+      --border-color: #475569;
+      --card-bg: #334155;
+      --bg-light: #1e293b;
+    }
+  </style>
+  
+  <link rel="icon" href="images/lawconnect.jpg" type="image/x-icon">
+</head>
+<body>
+  <main class="landing-container" aria-labelledby="welcomeTitle">
+    <h1 id="welcomeTitle" class="sr-only">Welcome to LawConnect</h1> <!-- Hidden title for accessibility -->
+
+    <section class="logo-section">
+      <img src="images/lawconnect.jpg" alt="LawConnect logo featuring a gavel" />
+    </section>
+
+    <nav class="button-group" aria-label="Account Actions">
+<button type="button" class="btn signup" onclick="console.log('Sign Up button clicked'); window.location.href='SignupPage.html'" aria-label="Sign up for a new account">SIGN UP</button>
+      <button type="button" class="btn login" onclick="window.location.href='accTypeInterface.html'" aria-label="Log in to your account">LOGIN</button>
+    </nav>
+    
+    <footer class="landing-footer">LAWCONNECT</footer>
+  </main>
+
+</body>
+</html>
