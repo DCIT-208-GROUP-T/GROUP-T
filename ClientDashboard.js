@@ -1,19 +1,11 @@
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAlyIP81ut-Stj6Uyf123SOTNThfnNxYOs",
-  authDomain: "lawconnect-swe2547.firebaseapp.com",
-  projectId: "lawconnect-swe2547",
-  storageBucket: "lawconnect-swe2547.firebasestorage.app",
-  messagingSenderId: "584082304319",
-  app极Id: "1:584082304319:web:106b26321b34f64ac9b78a"
-};
+import firebaseConfig from './firebase-config.js';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const clientNameEl = document.getElementById('clientName');
 const activeCasesCountEl = document.getElementById('activeCasesCount');
@@ -27,7 +19,39 @@ const navItems = document.querySelectorAll('.nav-item');
 
 let currentUserData = null;
 
-async function loadEnhancedClientDashboard() {
+async function fetchWithAuth(url, idToken) {
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${idToken}`
+    }
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+async function fetchAppointments(idToken) {
+  return fetchWithAuth(`${API_BASE_URL}/appointments/client`, idToken);
+}
+
+async function fetchCases(idToken) {
+  return fetchWithAuth(`${API_BASE_URL}/cases/client`, idToken);
+}
+
+async function fetchDocuments(idToken) {
+  return fetchWithAuth(`${API_BASE_URL}/documents`, idToken);
+}
+
+async function fetchMessages(idToken) {
+  return fetchWithAuth(`${API_BASE_URL}/messages/user/${auth.currentUser.uid}/unread`, idToken);
+}
+
+async function fetchNotifications(idToken) {
+  return fetchWithAuth(`${API_BASE_URL}/notifications`, idToken);
+}
+
+async function loadClientDashboard() {
   try {
     // Check user session
     const userSession = JSON.parse(localStorage.getItem('lawconnect_user') || sessionStorage.getItem('lawconnect_user'));
@@ -41,13 +65,16 @@ async function loadEnhancedClientDashboard() {
     currentUserData = userSession;
     clientNameEl.textContent = currentUserData.fullName || 'Client';
 
+    // Get Firebase ID token for API auth
+    const idToken = await auth.currentUser.getIdToken();
+
     // Load all dashboard data in parallel
     const [appointmentsData, casesData, documentsData, messagesData, notificationsData] = await Promise.all([
-      fetchAppointments(),
-      fetchCases(),
-      fetchDocuments(),
-      fetchMessages(),
-      fetchNotifications()
+      fetchAppointments(idToken),
+      fetchCases(idToken),
+      fetchDocuments(idToken),
+      fetchMessages(idToken),
+      fetchNotifications(idToken)
     ]);
 
     // Update stats
@@ -74,9 +101,13 @@ async function loadEnhancedClientDashboard() {
   }
 }
 
-async function fetchAppointments() {
+async function fetchAppointments(idToken) {
   try {
-    const response = await fetch(`${API_BASE_URL}/appointments/client/${currentUserData._id}?upcoming=true`);
+    const response = await fetch(`${API_BASE_URL}/appointments/client/?upcoming=true`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
     if (response.ok) {
       return await response.json();
     }
@@ -87,9 +118,13 @@ async function fetchAppointments() {
   }
 }
 
-async function fetchCases() {
+async function fetchCases(idToken) {
   try {
-    const response = await fetch(`${API_BASE_URL}/cases/client/${currentUserData._id}`);
+    const response = await fetch(`${API_BASE_URL}/cases/client/`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
     if (response.ok) {
       return await response.json();
     }
@@ -100,9 +135,13 @@ async function fetchCases() {
   }
 }
 
-async function fetchDocuments() {
+async function fetchDocuments(idToken) {
   try {
-    const response = await fetch(`${API_BASE_URL}/documents/client/${currentUserData._id}`);
+    const response = await fetch(`${API_BASE_URL}/documents`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
     if (response.ok) {
       return await response.json();
     }
@@ -113,9 +152,13 @@ async function fetchDocuments() {
   }
 }
 
-async function fetchMessages() {
+async function fetchMessages(idToken) {
   try {
-    const response = await fetch(`${API_BASE_URL}/messages/client/${currentUserData._id}?unread=true`);
+    const response = await fetch(`${API_BASE_URL}/messages/user/${currentUserData.uid}/unread`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
     if (response.ok) {
       return await response.json();
     }
@@ -126,11 +169,16 @@ async function fetchMessages() {
   }
 }
 
-async function fetchNotifications() {
+async function fetchNotifications(idToken) {
   try {
-    const response = await fetch(`${API_BASE_URL}/notifications/client/${currentUserData._id}?unread=true`);
+    const response = await fetch(`${API_BASE_URL}/notifications?unreadOnly=true`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
     if (response.ok) {
-      return await response.json();
+      const data = await response.json();
+      return data.data || [];
     }
     return [];
   } catch (error) {
@@ -177,7 +225,7 @@ function renderAppointments(appointments) {
           year: 'numeric' 
         })}, ${appt.time}</strong><br />
         Consultation with ${appt.lawyerId?.fullName || 'Your Lawyer'}<br />
-        Topic: ${appt.case极Id?.title || 'General Consultation'}
+        Topic: ${appt.caseId?.title || 'General Consultation'}
       </div>
     `;
     upcomingClientAppointmentsEl.appendChild(appointmentItem);
@@ -234,7 +282,7 @@ function setupEventListeners() {
           // Already on dashboard
           break;
         case 1: // Messages
-          window.location.href = 'Message.html';
+          window.location.href = 'client-messages.html';
           break;
         case 2: // Profile
           window.location.href = 'client-profile.html';
@@ -251,9 +299,14 @@ function setupRealTimeUpdates() {
   // Simulate real-time updates (replace with actual Firebase listeners)
   setInterval(async () => {
     try {
+      if (!auth.currentUser) {
+        console.warn('User not authenticated for real-time updates');
+        return;
+      }
+      const idToken = await auth.currentUser.getIdToken();
       const [messages, notifications] = await Promise.all([
-        fetchMessages(),
-        fetchNotifications()
+        fetchMessages(idToken),
+        fetchNotifications(idToken)
       ]);
 
       newMessagesCountEl.textContent = messages.length;
@@ -288,7 +341,13 @@ function showError(message) {
   }, 5000);
 }
 
-document.addEventListener('DOMContentLoaded', loadEnhancedClientDashboard);
-
-window.viewCase = viewCase;
-
+document.addEventListener('DOMContentLoaded', () => {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      loadClientDashboard();
+    } else {
+      console.warn('User not authenticated with Firebase. Redirecting to login.');
+      window.location.href = 'loginPage.html';
+    }
+  });
+});

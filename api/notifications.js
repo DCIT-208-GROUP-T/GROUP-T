@@ -1,12 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const Notification = require('../models/Notification');
+const {
+  getUserNotifications,
+  getUnreadCount,
+  markAsRead,
+  getNotificationById,
+  createNotification,
+  updateNotification,
+  deleteNotification,
+  deleteUserNotifications
+} = require('../models/NotificationFirestore');
 
 router.get('/', async (req, res) => {
   try {
     const { limit = 50, skip = 0, unreadOnly, type } = req.query;
 
-    const notifications = await Notification.getUserNotifications(req.user._id, {
+    const notifications = await getUserNotifications(req.user.id, {
       limit: parseInt(limit),
       skip: parseInt(skip),
       unreadOnly: unreadOnly === 'true',
@@ -19,7 +28,7 @@ router.get('/', async (req, res) => {
       pagination: {
         limit: parseInt(limit),
         skip: parseInt(skip),
-        total: await Notification.countDocuments({ userId: req.user._id })
+        total: notifications.length
       }
     });
   } catch (error) {
@@ -33,7 +42,7 @@ router.get('/', async (req, res) => {
 
 router.get('/unread-count', async (req, res) => {
   try {
-    const count = await Notification.getUnreadCount(req.user._id);
+    const count = await getUnreadCount(req.user.id);
 
     res.json({
       success: true,
@@ -52,7 +61,7 @@ router.put('/mark-read', async (req, res) => {
   try {
     const { notificationIds } = req.body;
 
-    await Notification.markAsRead(req.user._id, notificationIds);
+    await markAsRead(req.user.id, notificationIds);
 
     res.json({
       success: true,
@@ -69,19 +78,16 @@ router.put('/mark-read', async (req, res) => {
 
 router.put('/:id/read', async (req, res) => {
   try {
-    const notification = await Notification.findOne({
-      _id: req.params.id,
-      userId: req.user._id
-    });
+    const notification = await getNotificationById(req.params.id);
 
-    if (!notification) {
+    if (!notification || notification.userId !== req.user.id) {
       return res.status(404).json({
         success: false,
         message: 'Notification not found'
       });
     }
 
-    await notification.markAsRead();
+    await markAsRead(req.user.id, [req.params.id]);
 
     res.json({
       success: true,
@@ -98,17 +104,16 @@ router.put('/:id/read', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
   try {
-    const notification = await Notification.findOneAndDelete({
-      _id: req.params.id,
-      userId: req.user._id
-    });
+    const notification = await getNotificationById(req.params.id);
 
-    if (!notification) {
+    if (!notification || notification.userId !== req.user.id) {
       return res.status(404).json({
         success: false,
         message: 'Notification not found'
       });
     }
+
+    await deleteNotification(req.params.id);
 
     res.json({
       success: true,
@@ -125,7 +130,7 @@ router.delete('/:id', async (req, res) => {
 
 router.delete('/', async (req, res) => {
   try {
-    await Notification.deleteMany({ userId: req.user._id });
+    await deleteUserNotifications(req.user.id);
 
     res.json({
       success: true,
@@ -153,8 +158,8 @@ router.post('/', async (req, res) => {
       metadata
     } = req.body;
 
-    const notification = new Notification({
-      userId: req.user._id,
+    const notification = await createNotification({
+      userId: req.user.id,
       title,
       message,
       type,
@@ -162,11 +167,10 @@ router.post('/', async (req, res) => {
       relatedEntityType,
       priority: priority || 'medium',
       actionUrl,
-      metadata
+      metadata,
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
-
-    await notification.save();
-    await notification.populate('relatedEntityId');
 
     res.status(201).json({
       success: true,

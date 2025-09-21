@@ -4,18 +4,294 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Lawyer | LawConnect</title>
-    <link rel="stylesheet" href="ClientDashboard.css">
+    <style>
+        :root {
+            --primary-bg: #002f5c;
+            --secondary-bg: #0a3c78;
+            --card-bg: #fff;
+            --light-grey-bg: #f8f9fa;
+            --text-color-dark: #2d3748;
+            --text-color-light: #fff;
+            --primary-text-color: #002f5c;
+            --accent-color: #1a00ff;
+            --success-color: #38a169;
+            --warning-color: #d69e2e;
+            --error-color: #e53e3e;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-color-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-header h1 {
+            color: var(--primary-text-color);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .contact-header p {
+            color: var(--text-color-dark);
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-text-color);
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(26, 0, 255, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .urgency-high {
+            color: var(--error-color);
+        }
+
+        .urgency-medium {
+            color: var(--warning-color);
+        }
+
+        .urgency-low {
+            color: var(--success-color);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0000e6;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--light-grey-bg);
+            color: var(--primary-text-color);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .success-message {
+            display: none;
+            background: var(--success-color);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .error-message {
+            background: var(--error-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .contact-card {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Contact Your Lawyer</h1>
-    </header>
-    <main>
-        <p>Form to contact your lawyer will go here.</p>
-    </main>
-    <footer>
-        <button onclick="window.location.href='ClientDashboard.html'">Back to Dashboard</button>
-    </footer>
+    <div class="container">
+        <div class="contact-card">
+            <div class="contact-header">
+                <h1>Contact Your Lawyer</h1>
+                <p>Send a message to your assigned lawyer. We'll ensure they receive it promptly.</p>
+            </div>
+
+            <div id="error-message" class="error-message"></div>
+
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Brief subject of your message" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="urgency">Urgency Level</label>
+                    <select id="urgency" name="urgency" required>
+                        <option value="">Select urgency</option>
+                        <option value="low">Low - General inquiry</option>
+                        <option value="medium">Medium - Needs attention soon</option>
+                        <option value="high">High - Urgent matter</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Describe your legal concern or question in detail..." required></textarea>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='ClientDashboard.html'">Back to Dashboard</button>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </div>
+            </form>
+
+            <div id="success-message" class="success-message">
+                <h3>Message Sent Successfully!</h3>
+                <p>Your message has been sent to your lawyer. They will respond as soon as possible.</p>
+                <button class="btn btn-secondary" onclick="window.location.href='ClientDashboard.html'" style="margin-top: 15px;">Return to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const subject = formData.get('subject').trim();
+            const urgency = formData.get('urgency');
+            const message = formData.get('message').trim();
+
+            // Basic validation
+            if (!subject || !urgency || !message) {
+                showError('Please fill in all required fields.');
+                return;
+            }
+
+            if (message.length < 10) {
+                showError('Please provide a more detailed message (at least 10 characters).');
+                return;
+            }
+
+            // Hide error, show loading state
+            hideError();
+            const submitBtn = this.querySelector('.btn-primary');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                // In a real implementation, this would send to the API
+                // For now, simulate sending
+                await simulateSendMessage({ subject, urgency, message });
+
+                // Show success
+                document.getElementById('contact-form').style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
+
+            } catch (error) {
+                showError('Failed to send message. Please try again.');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        // Simulate API call
+        function simulateSendMessage(data) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    console.log('Message sent:', data);
+                    resolve();
+                }, 1000);
+            });
+        }
+    </script>
 </body>
 </html>
 

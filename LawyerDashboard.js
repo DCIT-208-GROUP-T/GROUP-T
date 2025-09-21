@@ -169,20 +169,14 @@ async function loadLawyerDashboard() {
     unreadCountEl.textContent = unreadMessages.length;
     notificationBadgeEl.textContent = unreadMessages.length;
 
-    // Fetch Invoices using API (fallback to mock data if endpoint not available)
-    let totalUnpaid = 8500; // Default mock value
+    // Fetch Invoices using API
+    let totalUnpaid = 0;
     try {
       const invoices = await fetchData(`/invoices/lawyer/${currentUserData.uid}`);
       totalUnpaid = invoices.reduce((sum, inv) => sum + (inv.amount || 0), 0);
     } catch (error) {
-      console.log("Invoice endpoint not available, using mock data:", error.message);
-      // Use mock data for demonstration
-      const mockInvoices = [
-        { amount: 2500 },
-        { amount: 3500 },
-        { amount: 2500 }
-      ];
-      totalUnpaid = mockInvoices.reduce((sum, inv) => sum + (inv.amount || 0), 0);
+      console.error("Error fetching invoices:", error);
+      totalUnpaid = 0;
     }
     unpaidAmountEl.textContent = `$${totalUnpaid.toLocaleString()}`;
 
@@ -191,41 +185,7 @@ async function loadLawyerDashboard() {
 
   } catch (error) {
     console.error("Error loading lawyer dashboard data:", error);
-    // Fallback to mock data for demonstration
-    loadMockData();
   }
-}
-
-function loadMockData() {
-  const today = new Date();
-  const mockAppointments = [
-    { time: '10:00 AM', clientName: 'John Doe', caseType: 'Corporate Merger' },
-    { time: '2:30 PM', clientName: 'Jane Smith', caseType: 'Employment Dispute' }
-  ];
-
-  todaysAgendaEl.innerHTML = '';
-  mockAppointments.forEach(appt => {
-    const agendaItem = document.createElement('div');
-    agendaItem.className = 'agenda-item';
-    agendaItem.innerHTML = `
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#002f5c">
-        <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 11H12V7h1v6h3v1h-3.5z"/>
-      </svg>
-      <div>
-        <strong>${appt.time}</strong> - ${appt.clientName}<br>
-        <small>${appt.caseType}</small>
-      </div>
-    `;
-    todaysAgendaEl.appendChild(agendaItem);
-  });
-
-  openCasesCountEl.textContent = '12';
-  scheduledCountEl.textContent = mockAppointments.length;
-  unreadCountEl.textContent = '5';
-  notificationBadgeEl.textContent = '5';
-  unpaidAmountEl.textContent = '$8,500';
-
-  updateAnalytics('month');
 }
 
 navItems.forEach((item, index) => {

@@ -3,13 +3,26 @@ const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet'); // For basic security headers
 const morgan = require('morgan'); // For request logging
-const connectDB = require('./config/database');
 const config = require('./config');
+const admin = require('firebase-admin');
 
 const app = express();
 const PORT = config.PORT;
 
-connectDB();
+// Initialize Firebase Admin
+if (!admin.apps.length) {
+  const firebaseConfig = {
+    credential: admin.credential.cert({
+      type: "service_account",
+      project_id: config.FIREBASE_PROJECT_ID,
+      private_key: config.FIREBASE_PRIVATE_KEY,
+      client_email: config.FIREBASE_CLIENT_EMAIL,
+    }),
+    databaseURL: `https://${config.FIREBASE_PROJECT_ID}.firebaseio.com`
+  };
+
+  admin.initializeApp(firebaseConfig);
+}
 
 const rateLimit = require('express-rate-limit');
 
@@ -30,7 +43,7 @@ app.use((req, res, next) => {
 
 app.use(helmet());
 
-app.use(morgan('dev')); // 'dev' format provides concise output colored by status
+app.use(morgan(config.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,12 +55,30 @@ app.get('/settings', (req, res) => {
     res.sendFile(path.join(__dirname, 'settings.html'));
 });
 
-app.use('/api/users', require('./api/users'));
-app.use('/api/cases', require('./api/cases'));
-app.use('/api/appointments', require('./api/appointments'));
-app.use('/api/messages', require('./api/messages'));
-app.use('/api/notifications', require('./api/notifications'));
-app.use('/api/payments', require('./api/payments'));
+app.get('/lawyer-settings', (req, res) => {
+    console.log('Serving lawyer-settings.html');
+    res.sendFile(path.join(__dirname, 'lawyer-settings.html'));
+});
+
+const firebaseAuth = require('./middleware/firebaseAuth');
+
+const usersRouter = require('./api/users');
+const casesRouter = require('./api/cases');
+const appointmentsRouter = require('./api/appointments');
+const messagesRouter = require('./api/messages');
+const notificationsRouter = require('./api/notifications');
+const paymentsRouter = require('./api/payments');
+const documentsRouter = require('./api/documents');
+
+app.use('/api', firebaseAuth);
+
+app.use('/api/users', usersRouter);
+app.use('/api/cases', casesRouter);
+app.use('/api/appointments', appointmentsRouter);
+app.use('/api/messages', messagesRouter);
+app.use('/api/notifications', notificationsRouter);
+app.use('/api/payments', paymentsRouter);
+app.use('/api/documents', documentsRouter);
 
 app.get('/', (req, res) => {
     console.log('Serving index.html');
@@ -89,14 +120,44 @@ app.get('/case-management', (req, res) => {
     res.sendFile(path.join(__dirname, 'CaseManagementDashboard.html'));
 });
 
+app.get('/admin-login', (req, res) => {
+    console.log('Serving admin-login.html');
+    res.sendFile(path.join(__dirname, 'admin-login.html'));
+});
+
+app.get('/admin-login-page', (req, res) => {
+    console.log('Serving admin-login-page.html');
+    res.sendFile(path.join(__dirname, 'admin-login-page.html'));
+});
+
+app.get('/admin-dashboard', (req, res) => {
+    console.log('Serving AdminDashboard.html');
+    res.sendFile(path.join(__dirname, 'AdminDashboard.html'));
+});
+
 app.get('/messages', (req, res) => {
-    console.log('Serving Message.html');
-    res.sendFile(path.join(__dirname, 'Message.html'));
+    console.log('Serving client-messages.html');
+    res.sendFile(path.join(__dirname, 'client-messages.html'));
+});
+
+app.get('/lawyer-messages', (req, res) => {
+    console.log('Serving lawyer-messages.html');
+    res.sendFile(path.join(__dirname, 'lawyer-messages.html'));
 });
 
 app.get('/notifications', (req, res) => {
     console.log('Serving notifications.html');
     res.sendFile(path.join(__dirname, 'notifications.html'));
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: config.NODE_ENV
+    });
 });
 
 app.use((req, res, next) => {
@@ -109,8 +170,12 @@ app.use((err, req, res, next) => {
     res.status(500).sendFile(path.join(__dirname, '500.html')); // Serve a custom 500 page
 });
 
-app.listen(PORT, () => {
+if (require.main === module) {
+  app.listen(PORT, () => {
     console.log(`LawConnect server running on http://localhost:${PORT}`);
     console.log(`Access your app at: http://localhost:${PORT}`);
-});
+  });
+}
+
+module.exports = app;
 

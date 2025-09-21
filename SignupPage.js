@@ -6,14 +6,16 @@ const firebaseConfig = {
   storageBucket: "lawconnect-swe2547.firebasestorage.app",
   messagingSenderId: "584082304319",
   appId: "1:584082304319:web:106b26321b34f64ac9b78a",
-  measurementId: "G-XYJC8JJ5NE" // Optional, if you use Analytics
+  measurementId: "G-XYJC8JJ5NE" 
 };
+
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
+
 
 const signupForm = document.getElementById('signupForm');
 const lawyerRadio = document.querySelector('input[value="lawyer"]');
@@ -30,11 +32,14 @@ const signupBtn = document.querySelector('.signup-btn');
 const passwordError = document.getElementById('password-error');
 const confirmPasswordError = document.getElementById('confirm-password-error');
 
+/**
+ * Toggles the visibility and required status of lawyer/client specific fields.
+ */
 function toggleAccountTypeFields() {
-  console.log("Toggling account type fields"); // Debug log
+  console.log("Toggling account type fields"); 
   console.log("Lawyer radio checked:", lawyerRadio.checked);
   console.log("Client radio checked:", clientRadio.checked);
-
+  
   if (lawyerRadio.checked) {
     console.log("Showing lawyer fields, hiding client fields");
     lawyerFields.style.display = 'block';
@@ -57,21 +62,29 @@ function toggleAccountTypeFields() {
     specializationSelect.required = false;
     clientCaseTypeSelect.required = false;
   }
-
+  
   console.log("Lawyer fields display:", lawyerFields.style.display);
   console.log("Client fields display:", clientFields.style.display);
 }
 
+/**
+ * Validates the password strength.
+ * @param {string} password The password to validate.
+ * @returns {string|null} An error message if invalid, otherwise null.
+ */
 function validatePassword(password) {
   if (password.length < 6) {
     return 'Password must be at least 6 characters long.';
   }
-  // Add more complex password rules here (e.g., require numbers, symbols, etc.)
-  // if (!/[A-Z]/.test(password)) return 'Password must contain an uppercase letter.';
-  // if (!/[0-9]/.test(password)) return 'Password must contain a number.';
+  
+  
+  
   return null;
 }
 
+/**
+ * Handles real-time password and confirm password validation feedback.
+ */
 function handlePasswordValidation() {
   const password = passwordInput.value;
   const confirmPassword = confirmPasswordInput.value;
@@ -94,10 +107,14 @@ function handlePasswordValidation() {
   }
 }
 
+/**
+ * Handles the signup form submission.
+ * @param {Event} e The submit event.
+ */
 signupForm.addEventListener('submit', async function(e) {
   e.preventDefault();
 
-  // Re-run validation before submission
+  
   handlePasswordValidation();
   if (passwordInput.classList.contains('invalid') || confirmPasswordInput.classList.contains('invalid')) {
     alert('Please correct the password errors.');
@@ -112,17 +129,17 @@ signupForm.addEventListener('submit', async function(e) {
   const email = document.getElementById('email').value.trim();
   const password = passwordInput.value;
 
-  // Set loading state for the button
+  
   signupBtn.textContent = 'CREATING ACCOUNT...';
   signupBtn.disabled = true;
-  signupBtn.classList.add('loading'); // Add a class for potential loading spinner/styles
+  signupBtn.classList.add('loading'); 
 
   try {
-    // Create Firebase user account
+    
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
 
-    // Gather form data for Firestore
+    
     const formData = new FormData(this);
     const accountType = formData.get('accountType');
 
@@ -134,7 +151,7 @@ signupForm.addEventListener('submit', async function(e) {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
-    // Add account-specific data
+    
     if (accountType === 'lawyer') {
       userData.firmName = formData.get('firmName').trim();
       userData.barNumber = formData.get('barNumber').trim();
@@ -143,12 +160,48 @@ signupForm.addEventListener('submit', async function(e) {
       userData.primaryLegalInterest = formData.get('clientCaseType') || 'Not specified';
     }
 
-    // Save additional user data to Firestore
+    
     await db.collection('users').doc(user.uid).set(userData);
 
+    // Create user in MongoDB
+    const idToken = await user.getIdToken();
+    const mongoUserData = {
+      firebaseUid: user.uid,
+      email: email,
+      fullName: userData.fullName,
+      accountType: accountType,
+      phoneNumber: userData.phone,
+      profilePicture: ''
+    };
+
+    if (accountType === 'lawyer') {
+      mongoUserData.firmName = userData.firmName;
+      mongoUserData.barNumber = userData.barNumber;
+      mongoUserData.specialization = userData.specialization;
+    }
+
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${idToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(mongoUserData)
+      });
+
+      if (!response.ok) {
+        console.error('Failed to create user in database:', await response.text());
+        // Continue anyway, as Firestore has the data
+      }
+    } catch (error) {
+      console.error('Error creating user in database:', error);
+      // Continue
+    }
+
     alert('Account created successfully! You can now log in.');
-    // Optionally, send email verification: await user.sendEmailVerification();
-    // Then redirect to login page
+
+
     window.location.href = 'loginPage.html';
 
   } catch (error) {
@@ -171,7 +224,7 @@ signupForm.addEventListener('submit', async function(e) {
     alert(errorMessage);
 
   } finally {
-    // Reset button state
+    
     signupBtn.textContent = 'CREATE ACCOUNT';
     signupBtn.disabled = false;
     signupBtn.classList.remove('loading');
@@ -187,10 +240,11 @@ clientRadio.addEventListener('change', function() {
   toggleAccountTypeFields();
 });
 
+
 passwordInput.addEventListener('input', handlePasswordValidation);
 confirmPasswordInput.addEventListener('input', handlePasswordValidation);
+
 
 document.addEventListener('DOMContentLoaded', () => {
   toggleAccountTypeFields();
 });
-

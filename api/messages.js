@@ -1,31 +1,42 @@
 const express = require('express');
-const Message = require('../models/Message');
-const User = require('../models/User');
-const Case = require('../models/Case');
+const {
+  createMessage,
+  getMessageById,
+  updateMessage,
+  deleteMessage,
+  getMessagesBySender,
+  getMessagesByReceiver,
+  getMessagesByCase,
+  getConversation,
+  markMessageAsRead,
+  getAllMessages
+} = require('../models/MessageFirestore');
+const {
+  getUserById
+} = require('../models/UserFirestore');
+const {
+  getCaseById
+} = require('../models/CaseFirestore');
+const {
+  validateMessageCreation,
+  validateIdParam,
+  validateMessageIds,
+  validateUserIdParam
+} = require('../middleware/validation');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
-    const messages = await Message.find()
-      .populate('senderId', 'fullName email accountType')
-      .populate('receiverId', 'fullName email accountType')
-      .populate('caseId', 'title')
-      .select('-__v')
-      .sort({ createdAt: -1 });
+    const messages = await getAllMessages();
     res.json(messages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateIdParam, async (req, res) => {
   try {
-    const message = await Message.findById(req.params.id)
-      .populate('senderId', 'fullName email accountType')
-      .populate('receiverId', 'fullName email accountType')
-      .populate('caseId', 'title')
-      .select('-__v');
-
+    const message = await getMessageById(req.params.id);
     if (!message) {
       return res.status(404).json({ message: 'Message not found' });
     }
@@ -38,7 +49,7 @@ router.get('/:id', async (req, res) => {
 router.get('/conversation/:userId1/:userId2', async (req, res) => {
   try {
     const { caseId, limit } = req.query;
-    const messages = await Message.getConversation(
+    const messages = await getConversation(
       req.params.userId1,
       req.params.userId2,
       caseId,
@@ -50,60 +61,53 @@ router.get('/conversation/:userId1/:userId2', async (req, res) => {
   }
 });
 
-router.get('/user/:userId', async (req, res) => {
+router.get('/user/:userId?', async (req, res) => {
   try {
-    const { type } = req.query;
-    let query = {
-      $or: [
-        { senderId: req.params.userId },
-        { receiverId: req.params.userId }
-      ]
-    };
-
-    if (type === 'sent') {
-      query = { senderId: req.params.userId };
-    } else if (type === 'received') {
-      query = { receiverId: req.params.userId };
+    if (!req.params.userId) {
+      if (!req.user) return res.status(401).json({ message: 'Authentication required' });
+      req.params.userId = req.user.id;
     }
-
-    const messages = await Message.find(query)
-      .populate('senderId', 'fullName email accountType')
-      .populate('receiverId', 'fullName email accountType')
-      .populate('caseId', 'title')
-      .select('-__v')
-      .sort({ createdAt: -1 });
-
+    const { type } = req.query;
+    let messages;
+    if (type === 'sent') {
+      messages = await getMessagesByUser(req.params.userId, 'sent');
+    } else if (type === 'received') {
+      messages = await getMessagesByUser(req.params.userId, 'received');
+    } else {
+      // For 'all' type, get sent and received messages and merge
+      const sentMessages = await getMessagesByUser(req.params.userId, 'sent');
+      const receivedMessages = await getMessagesByUser(req.params.userId, 'received');
+      messages = [...sentMessages, ...receivedMessages];
+      // Optionally sort by createdAt descending
+      messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
     res.json(messages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/user/:userId/unread', async (req, res) => {
+router.get('/user/:userId?/unread', async (req, res) => {
   try {
-    const messages = await Message.find({
-      receiverId: req.params.userId,
-      isRead: false
-    })
-      .populate('senderId', 'fullName email accountType')
-      .populate('caseId', 'title')
-      .select('-__v')
-      .sort({ createdAt: -1 });
-
+    if (!req.params.userId) {
+      if (!req.user) return res.status(401).json({ message: 'Authentication required' });
+      req.params.userId = req.user.id;
+    }
+    const messages = await getUnreadMessagesByUser(req.params.userId);
     res.json(messages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', validateMessageCreation, async (req, res) => {
   try {
     const { senderId, receiverId, caseId, content, messageType, fileUrl, fileName } = req.body;
 
     // Verify sender and receiver exist
     const [sender, receiver] = await Promise.all([
-      User.findById(senderId),
-      User.findById(receiverId)
+      getUserById(senderId),
+      getUserById(receiverId)
     ]);
 
     if (!sender) {
@@ -116,47 +120,40 @@ router.post('/', async (req, res) => {
 
     // Verify case exists if provided
     if (caseId) {
-      const caseData = await Case.findById(caseId);
+      const caseData = await getCaseById(caseId);
       if (!caseData) {
         return res.status(400).json({ message: 'Invalid case ID' });
       }
     }
 
-    const message = new Message({
+    const message = await createMessage({
       senderId,
       receiverId,
       caseId,
       content,
       messageType,
       fileUrl,
-      fileName
+      fileName,
+      isRead: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
     });
 
-    const savedMessage = await message.save();
-    const populatedMessage = await Message.findById(savedMessage._id)
-      .populate('senderId', 'fullName email accountType')
-      .populate('receiverId', 'fullName email accountType')
-      .populate('caseId', 'title');
-
-    res.status(201).json(populatedMessage);
+    res.status(201).json(message);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.patch('/:id/read', async (req, res) => {
+router.patch('/:id/read', validateIdParam, async (req, res) => {
   try {
-    const message = await Message.findById(req.params.id);
+    const message = await getMessageById(req.params.id);
 
     if (!message) {
       return res.status(404).json({ message: 'Message not found' });
     }
 
-    await message.markAsRead();
-    const updatedMessage = await Message.findById(req.params.id)
-      .populate('senderId', 'fullName email accountType')
-      .populate('receiverId', 'fullName email accountType')
-      .select('-__v');
+    const updatedMessage = await markMessageAsRead(req.params.id);
 
     res.json(updatedMessage);
   } catch (error) {
@@ -172,29 +169,25 @@ router.patch('/read-multiple', async (req, res) => {
       return res.status(400).json({ message: 'Invalid message IDs' });
     }
 
-    const result = await Message.updateMany(
-      { _id: { $in: messageIds } },
-      { 
-        isRead: true,
-        readAt: new Date()
-      }
-    );
+    const promises = messageIds.map(id => markMessageAsRead(id));
+    await Promise.all(promises);
 
     res.json({ 
-      message: `${result.modifiedCount} messages marked as read`,
-      modifiedCount: result.modifiedCount
+      message: `${messageIds.length} messages marked as read`,
+      modifiedCount: messageIds.length
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateIdParam, async (req, res) => {
   try {
-    const message = await Message.findByIdAndDelete(req.params.id);
+    const message = await getMessageById(req.params.id);
     if (!message) {
       return res.status(404).json({ message: 'Message not found' });
     }
+    await deleteMessage(req.params.id);
     res.json({ message: 'Message deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message });

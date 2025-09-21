@@ -97,12 +97,12 @@ loginForm.addEventListener('submit', async function(e) {
 
       alert(`Welcome back, ${userData.fullName}!`);
 
-      // Redirect based on account type
-      if (userData.accountType === 'lawyer') {
-        window.location.href = 'LawyerDashboard.html'; // Redirect to enhanced lawyer dashboard
-      } else {
-        window.location.href = 'ClientDashboard.html'; // Redirect to client dashboard
-      }
+    // Redirect based on account type
+    if (userData.accountType === 'lawyer') {
+      window.location.href = 'LawyerDashboard.html'; // Redirect to enhanced lawyer dashboard
+    } else {
+      window.location.href = 'ClientDashboard.html'; // Redirect to client dashboard
+    }
 
     } else {
       // This case should ideally not happen if user was created via signup

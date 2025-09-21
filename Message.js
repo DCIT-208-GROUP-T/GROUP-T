@@ -1,4 +1,4 @@
-
+// Firebase configuration (ensure this matches your project)
 const firebaseConfig = {
   apiKey: "AIzaSyAlyIP81ut-Stj6Uyf123SOTNThfnNxYOs",
   authDomain: "lawconnect-swe2547.firebaseapp.com",
@@ -9,14 +9,17 @@ const firebaseConfig = {
   // measurementId: "G-XYJC8JJ5NE" // Optional, if you use Analytics
 };
 
+// Initialize Firebase (only if not already initialized)
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// API Base URL
 const API_BASE_URL = 'http://localhost:3000/api';
 
+// DOM Elements
 const conversationList = document.getElementById('conversation-list');
 const emptyChatState = document.getElementById('empty-chat-state');
 const activeChatView = document.getElementById('active-chat-view');
@@ -27,9 +30,13 @@ const chatTitle = document.getElementById('chat-title');
 const caseBadge = document.getElementById('case-badge');
 const conversationSearchInput = document.getElementById('conversation-search');
 
+// State
 let activeConversation = null;
 let conversations = [];
 
+/**
+ * Loads and renders the list of conversations in the sidebar.
+ */
 async function loadConversations() {
   const userSession = JSON.parse(localStorage.getItem('lawconnect_user') || sessionStorage.getItem('lawconnect_user'));
   if (!userSession) {
@@ -53,6 +60,9 @@ async function loadConversations() {
   }
 }
 
+/**
+ * Renders the list of conversations in the sidebar.
+ */
 function renderConversations(conversations) {
   conversationList.innerHTML = ''; // Clear existing conversations
 
@@ -84,6 +94,10 @@ function renderConversations(conversations) {
   });
 }
 
+/**
+ * Opens a specific conversation in the chat area.
+ * @param {string} conversationId The ID of the conversation to open.
+ */
 async function openConversation(conversationId) {
   const userSession = JSON.parse(localStorage.getItem('lawconnect_user') || sessionStorage.getItem('lawconnect_user'));
   if (!userSession) {
@@ -97,7 +111,7 @@ async function openConversation(conversationId) {
     const response = await fetch(`${API_BASE_URL}/messages/${conversationId}`);
     if (response.ok) {
       activeConversation = await response.json();
-
+      
       // Update UI: remove 'active' from all conversation items, add to the clicked one
       document.querySelectorAll('.conversation-item').forEach(el => {
         el.classList.remove('active');
@@ -133,6 +147,9 @@ async function openConversation(conversationId) {
   }
 }
 
+/**
+ * Renders the messages for the currently active conversation.
+ */
 function renderMessages() {
   messagesContainer.innerHTML = ''; // Clear existing messages
 
@@ -155,6 +172,9 @@ function renderMessages() {
   messagesContainer.appendChild(messageElement);
 }
 
+/**
+ * Sends a new message in the active conversation.
+ */
 async function sendMessage() {
   const text = messageInput.value.trim();
   if (!text || !activeConversation) {
@@ -191,10 +211,10 @@ async function sendMessage() {
       const savedMessage = await response.json();
       messageInput.value = ''; // Clear input field
       messageInput.style.height = 'auto'; // Reset textarea height
-
+      
       // Reload conversations to show the new message
       loadConversations();
-
+      
       // Scroll to the bottom of the messages container
       setTimeout(() => {
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -207,6 +227,9 @@ async function sendMessage() {
   }
 }
 
+/**
+ * Auto-resizes the textarea based on content.
+ */
 function autoResizeTextarea() {
   messageInput.style.height = 'auto'; // Reset height to calculate new scrollHeight
   messageInput.style.height = messageInput.scrollHeight + 'px'; // Set height to scrollHeight
@@ -218,11 +241,21 @@ function autoResizeTextarea() {
   }
 }
 
+/**
+ * Formats an ISO date string to a readable time (e.g., "10:30 AM").
+ * @param {string} isoString The ISO date string.
+ * @returns {string} Formatted time.
+ */
 function formatTime(isoString) {
   const options = { hour: 'numeric', minute: 'numeric', hour12: true };
   return new Date(isoString).toLocaleTimeString('en-US', options);
 }
 
+/**
+ * Formats an ISO date string for the conversation list (e.g., "10:30 AM" or "Jul 18").
+ * @param {string} isoString The ISO date string.
+ * @returns {string} Formatted time or date.
+ */
 function formatTimeForList(isoString) {
   const date = new Date(isoString);
   const today = new Date();
@@ -241,6 +274,7 @@ function formatTimeForList(isoString) {
   }
 }
 
+// Event Listeners
 sendBtn.addEventListener('click', sendMessage);
 
 messageInput.addEventListener('keypress', (e) => {
@@ -267,7 +301,8 @@ conversationSearchInput.addEventListener('input', function() {
   });
 });
 
+
+// Initial load when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', () => {
   loadConversations();
 });
-

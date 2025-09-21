@@ -100,7 +100,8 @@
 
     <div class="documents-container">
       <div class="doc-actions">
-        <button class="upload-btn">
+        <input type="file" id="fileInput" style="display: none;" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.txt">
+        <button class="upload-btn" id="uploadBtn">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
           </svg>
@@ -119,49 +120,6 @@
       </div>
 
       <div class="documents-grid">
-        <div class="doc-card">
-          <div class="doc-icon">📄</div>
-          <div class="doc-name">Merger Agreement Draft v5.pdf</div>
-          <div class="doc-meta">Added July 12, 2024</div>
-          <div class="doc-meta">2.4 MB</div>
-          <div class="doc-options">
-            <button>Share</button>
-            <button>Download</button>
-          </div>
-        </div>
-
-        <div class="doc-card">
-          <div class="doc-icon">📝</div>
-          <div class="doc-name">Deposition Notes - Smith Case.docx</div>
-          <div class="doc-meta">Added July 8, 2024</div>
-          <div class="doc-meta">1.1 MB</div>
-          <div class="doc-options">
-            <button>Share</button>
-            <button>Download</button>
-          </div>
-        </div>
-
-        <div class="doc-card">
-          <div class="doc-icon">🖼️</div>
-          <div class="doc-name">Property Photos - Johnson Deal</div>
-          <div class="doc-meta">Added June 30, 2024</div>
-          <div class="doc-meta">5.6 MB</div>
-          <div class="doc-options">
-            <button>Share</button>
-            <button>Download</button>
-          </div>
-        </div>
-
-        <div class="doc-card">
-          <div class="doc-icon">📄</div>
-          <div class="doc-name">Court Order - Case #2345678.pdf</div>
-          <div class="doc-meta">Added June 22, 2024</div>
-          <div class="doc-meta">3.2 MB</div>
-          <div class="doc-options">
-            <button>Share</button>
-            <button>Download</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -185,6 +143,159 @@
       </a>
     </nav>
   </footer>
+
+  <script>
+    // DOM elements
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInput = document.getElementById('fileInput');
+    const documentsGrid = document.querySelector('.documents-grid');
+
+    // Event listeners
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', handleFileUpload);
+
+    // Load documents on page load
+    document.addEventListener('DOMContentLoaded', loadDocuments);
+
+    // Functions
+    async function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validate file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('File size must be less than 10MB');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('document', file);
+      formData.append('category', 'other'); // Default category
+
+      try {
+        const response = await fetch('/api/documents', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          const newDocument = await response.json();
+          alert('Document uploaded successfully!');
+          loadDocuments(); // Refresh the documents list
+        } else {
+          const error = await response.json();
+          alert('Upload failed: ' + error.message);
+        }
+      } catch (error) {
+        console.error('Upload error:', error);
+        alert('Upload failed. Please try again.');
+      }
+
+      // Reset file input
+      fileInput.value = '';
+    }
+
+    async function loadDocuments() {
+      try {
+        const response = await fetch('/api/documents');
+        if (response.ok) {
+          const documents = await response.json();
+          displayDocuments(documents);
+        } else {
+          console.error('Failed to load documents');
+        }
+      } catch (error) {
+        console.error('Error loading documents:', error);
+      }
+    }
+
+    function displayDocuments(documents) {
+      // Clear existing documents
+      documentsGrid.innerHTML = '';
+
+      if (documents.length === 0) {
+        documentsGrid.innerHTML = '<p>No documents found.</p>';
+        return;
+      }
+
+      documents.forEach(doc => {
+        const docCard = createDocumentCard(doc);
+        documentsGrid.appendChild(docCard);
+      });
+    }
+
+    function createDocumentCard(doc) {
+      const card = document.createElement('div');
+      card.className = 'doc-card';
+
+      const icon = getFileIcon(doc.mimetype);
+      const sizeFormatted = formatFileSize(doc.size);
+      const dateAdded = new Date(doc.createdAt).toLocaleDateString();
+
+      card.innerHTML = `
+        <div class="doc-icon">${icon}</div>
+        <div class="doc-name" title="${doc.originalName}">${doc.originalName}</div>
+        <div class="doc-meta">Added ${dateAdded}</div>
+        <div class="doc-meta">${sizeFormatted}</div>
+        <div class="doc-options">
+          <button onclick="shareDocument('${doc._id}')">Share</button>
+          <button onclick="downloadDocument('${doc._id}', '${doc.originalName}')">Download</button>
+        </div>
+      `;
+
+      return card;
+    }
+
+    function getFileIcon(mimetype) {
+      const type = mimetype.split('/')[0];
+      switch (type) {
+        case 'image': return '🖼️';
+        case 'video': return '🎥';
+        case 'audio': return '🎵';
+        case 'text': return '📝';
+        default: return '📄';
+      }
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    async function downloadDocument(docId, filename) {
+      try {
+        const response = await fetch(`/api/documents/download/${docId}`);
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        } else {
+          alert('Download failed');
+        }
+      } catch (error) {
+        console.error('Download error:', error);
+        alert('Download failed');
+      }
+    }
+
+    function shareDocument(docId) {
+      // For now, just show an alert. In a real app, this would open a share dialog
+      alert('Share functionality coming soon!');
+    }
+  </script>
 </body>
 </html>
 

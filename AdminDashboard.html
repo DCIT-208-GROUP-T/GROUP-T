@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LawConnect Admin Dashboard: Manage users, cases, and platform settings" />
+  <meta name="keywords" content="LawConnect, admin dashboard, user management, legal platform" />
+  <meta name="author" content="LawConnect Team" />
+  <title>Admin Dashboard | LawConnect</title>
+  <link rel="stylesheet" href="AdminDashboard.css" />
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+  <main class="admin-dashboard-main-container">
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <h1 class="dashboard-title">Admin Dashboard</h1>
+        <span class="admin-name" id="adminName">Loading...</span>
+      </div>
+      <div class="top-bar-right">
+        <button class="icon-button" onclick="logout()" title="Logout">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Users</h3>
+        <p id="totalUsersCount">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Active Lawyers</h3>
+        <p id="activeLawyersCount">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Active Clients</h3>
+        <p id="activeClientsCount">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Open Cases</h3>
+        <p id="openCasesCount">0</p>
+      </div>
+    </section>
+
+    <section class="user-management">
+      <h2>User Management</h2>
+      <table id="usersTable">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Account Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- User rows will be populated here -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="AdminDashboard.js"></script>
+</body>
+</html>

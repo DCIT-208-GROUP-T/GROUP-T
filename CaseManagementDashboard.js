@@ -1,42 +1,11 @@
-const API_BASE_URL = 'http://localhost:3000/api'; // API Base URL
+import firebaseConfig from './firebase-config.js';
 
-const mockDocuments = [
-  {
-    id: 1,
-    name: "Contract Draft v3.pdf",
-    type: "pdf",
-    date: "2024-07-10",
-    caseId: 1
-  },
-  {
-    id: 2,
-    name: "Deposition Transcript.docx",
-    type: "doc",
-    date: "2024-07-05",
-    caseId: 2
-  },
-  {
-    id: 3,
-    name: "Property Survey.png",
-    type: "image",
-    date: "2024-06-20",
-    caseId: 3
-  },
-  {
-    id: 4,
-    name: "Court Order.pdf",
-    type: "pdf",
-    date: "2024-06-12",
-    caseId: 4
-  },
-  {
-    id: 5,
-    name: "Client Declaration.docx",
-    type: "doc",
-    date: "2024-06-08",
-    caseId: 1
-  }
-];
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+
+const API_BASE_URL = 'http://localhost:5000/api'; // API Base URL
 
 const activeCountEl = document.getElementById('active-count');
 const pendingCountEl = document.getElementById('pending-count');
@@ -60,8 +29,15 @@ async function loadDashboard() {
   }
 
   try {
+    // Get Firebase ID token for API auth
+    const idToken = await auth.currentUser.getIdToken();
+
     // Fetch cases from API
-    const response = await fetch(`${API_BASE_URL}/cases/client/${userSession._id}`);
+    const response = await fetch(`${API_BASE_URL}/cases/client`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
     const cases = await response.json();
 
     // Filter cases based on currentFilter
@@ -78,17 +54,27 @@ async function loadDashboard() {
     activeCountEl.textContent = activeCases.length;
     pendingCountEl.textContent = pendingReviewCases.length;
     hearingCountEl.textContent = upcomingHearings.length;
-    documentsCountEl.textContent = mockDocuments.length; // This will also need to be fetched from the API
+
+    // Fetch documents from API
+    const documentsResponse = await fetch(`${API_BASE_URL}/documents`, {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    });
+    const documents = documentsResponse.ok ? await documentsResponse.json() : [];
+    documentsCountEl.textContent = documents.length;
 
     // Populate cases table
     renderCasesTable(filteredCases);
 
     // Populate recent documents
-    renderDocumentsGrid(mockDocuments.slice(0, 5)); // Show only first 5 recent documents
+    renderDocumentsGrid(documents.slice(0, 5)); // Show only first 5 recent documents
   } catch (error) {
     console.error('Error loading dashboard data:', error);
   }
 }
+
+
 
 function renderCasesTable(casesToRender) {
   casesTableBody.innerHTML = ''; // Clear existing rows
@@ -213,5 +199,14 @@ filterTabs.forEach(tab => {
   });
 });
 
-document.addEventListener('DOMContentLoaded', loadDashboard);
+document.addEventListener('DOMContentLoaded', () => {
+  auth.onAuthStateChanged((user) => {
+    if (user) {
+      loadDashboard();
+    } else {
+      console.warn('User not authenticated with Firebase. Redirecting to login.');
+      window.location.href = 'loginPage.html';
+    }
+  });
+});
 
